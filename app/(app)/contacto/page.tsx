@@ -1,111 +1,73 @@
-import {
-  MessageCircle,
-  User,
-  Heart,
-  Calendar,
-  Truck,
-  CreditCard,
-  Clock,
-  ClipboardList,
-} from 'lucide-react'
+import { Great_Vibes } from 'next/font/google'
+import { MessageCircle, Camera, Globe } from 'lucide-react'
+
+const greatVibes = Great_Vibes({
+  subsets: ['latin'],
+  weight: '400',
+})
 
 const WHATSAPP_NUMBER = '573001234567'
+
+const socialLinks = [
+  {
+    href: `https://wa.me/${WHATSAPP_NUMBER}`,
+    icon: MessageCircle,
+    label: 'WhatsApp',
+    color: 'hover:bg-green-600 hover:text-white hover:shadow-green-600/25',
+  },
+  {
+    href: '#',
+    icon: Camera,
+    label: 'Instagram',
+    color: 'hover:bg-gradient-to-tr hover:from-pink-500 hover:via-purple-500 hover:to-orange-400 hover:text-white hover:shadow-pink-500/25',
+  },
+  {
+    href: '#',
+    icon: Globe,
+    label: 'Facebook',
+    color: 'hover:bg-blue-600 hover:text-white hover:shadow-blue-600/25',
+  },
+]
 
 export default function ContactoPage() {
   return (
     <main className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        <h1 className="font-display text-3xl text-charcoal sm:text-4xl">
+        <h1
+          className={`${greatVibes.className} text-center text-5xl text-charcoal sm:text-7xl`}
+        >
           Contacto
         </h1>
+        <div className="mt-3 flex items-center justify-center gap-2">
+          <span className="h-px w-6 bg-terracotta-300/60" />
+          <span className="text-[10px] text-terracotta-400/60">&#10022;</span>
+          <span className="h-px w-6 bg-terracotta-300/60" />
+        </div>
 
         <div className="mt-10 space-y-6">
-          <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
-            <div className="flex items-start gap-4">
-              <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-terracotta-400" />
-              <div className="space-y-4 text-stone">
-                <p className="leading-relaxed">
-                  ¡Hola! Gracias por comunicarte con Florale.
-                </p>
-                <p className="leading-relaxed">
-                  Puedes ver nuestro catálogo en el ícono de la casita en la
-                  parte superior.
-                </p>
-                <p className="leading-relaxed">
-                  Una vez elijas tu producto, indícanos cómo deseas
-                  personalizarlo (colores, frases, tarjeta, etc.).
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
-            <div className="flex items-start gap-4">
-              <ClipboardList className="mt-0.5 h-5 w-5 shrink-0 text-terracotta-400" />
-              <div className="w-full">
-                <h2 className="font-display text-lg text-charcoal">
-                  Para agendar tu pedido necesitamos:
-                </h2>
-
-                <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                  {[
-                    { icon: User, label: 'Nombre de quien envía' },
-                    { icon: Heart, label: 'Nombre de quien recibe' },
-                    { icon: Calendar, label: 'Fecha de entrega' },
-                    {
-                      icon: Truck,
-                      label: 'Modalidad: envío o retiro',
-                    },
-                  ].map((item) => (
-                    <div
-                      key={item.label}
-                      className="flex items-center gap-3 rounded-xl bg-cream px-4 py-3"
-                    >
-                      <item.icon className="h-4 w-4 shrink-0 text-terracotta-400" />
-                      <span className="text-sm text-stone">{item.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
-            <div className="flex items-start gap-4">
-              <CreditCard className="mt-0.5 h-5 w-5 shrink-0 text-terracotta-400" />
-              <div>
-                <h2 className="font-display text-lg text-charcoal">
-                  Confirmación
-                </h2>
-                <p className="mt-3 leading-relaxed text-stone">
-                  Para confirmar tu pedido, solicitamos una seña del 50% del
-                  valor total.
-                </p>
-                <div className="mt-4 flex items-center gap-3 rounded-xl bg-cream px-4 py-3">
-                  <Clock className="h-4 w-4 shrink-0 text-terracotta-400" />
-                  <span className="text-sm text-stone">
-                    Los pedidos se realizan de 24 a 48 horas antes
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-stone-light/30">
-            <MessageCircle className="mx-auto h-8 w-8 text-green-600" />
-            <p className="mt-4 text-sm text-stone">
-              Escríbenos por WhatsApp para coordinar tu pedido
-            </p>
+          {socialLinks.map((link) => (
             <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              key={link.label}
+              href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex h-11 items-center gap-2 rounded-xl bg-green-600 px-6 text-sm font-medium text-white transition-all hover:bg-green-700 hover:shadow-lg hover:shadow-green-600/25 active:scale-[0.98]"
+              className={`group flex items-center gap-5 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-stone-light/30 transition-all ${link.color} active:scale-[0.98]`}
             >
-              <MessageCircle className="h-4 w-4" />
-              Enviar WhatsApp
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cream transition-colors group-hover:bg-white/20">
+                <link.icon className="h-6 w-6 text-stone transition-colors group-hover:text-white" />
+              </div>
+              <div>
+                <p className="font-display text-base text-charcoal transition-colors group-hover:text-white">
+                  {link.label}
+                </p>
+                <p className="mt-0.5 text-sm text-stone transition-colors group-hover:text-white/80">
+                  {link.label === 'WhatsApp'
+                    ? 'Escríbenos para coordinar tu pedido'
+                    : 'Síguenos para ver nuestras novedades'}
+                </p>
+              </div>
             </a>
-          </section>
+          ))}
         </div>
       </div>
     </main>

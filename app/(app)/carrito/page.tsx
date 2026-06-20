@@ -55,7 +55,12 @@ export default function CartPage() {
             <h1 className="font-display text-2xl text-charcoal sm:text-3xl">
               Tu Carrito
             </h1>
-            <p className="mt-1 text-sm text-stone">
+            <div className="mt-2 flex items-center gap-2">
+              <span className="h-px w-6 bg-terracotta-300/60" />
+              <span className="text-[10px] text-terracotta-400/60">&#10022;</span>
+              <span className="h-px w-6 bg-terracotta-300/60" />
+            </div>
+            <p className="mt-3 text-sm text-stone">
               {items.length} {items.length === 1 ? 'producto' : 'productos'} en
               tu pedido
             </p>

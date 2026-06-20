@@ -1,31 +1,46 @@
-import { Store, ShoppingBag, MessageCircle, Clock, Leaf } from 'lucide-react'
-import Link from 'next/link'
+import {
+  Calendar,
+  ClipboardList,
+  Clock,
+  CreditCard,
+  Heart,
+  Leaf,
+  ShoppingBag,
+  Store,
+  Truck,
+  User,
+} from 'lucide-react';
+import { Great_Vibes } from 'next/font/google';
+import Link from 'next/link';
+
+const greatVibes = Great_Vibes({
+  subsets: ['latin'],
+  weight: '400',
+});
 
 export default function InfoPage() {
   return (
     <main className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        <h1 className="font-display text-3xl text-charcoal sm:text-4xl">
+        <h1 className={`${greatVibes.className} text-center text-5xl text-charcoal sm:text-7xl`}>
           Información
         </h1>
+        <div className="mt-3 flex items-center justify-center gap-2">
+          <span className="h-px w-6 bg-terracotta-300/60" />
+          <span className="text-[10px] text-terracotta-400/60">&#10022;</span>
+          <span className="h-px w-6 bg-terracotta-300/60" />
+        </div>
 
         <div className="mt-10 space-y-8">
           <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
             <div className="flex items-start gap-4">
               <Store className="mt-1 h-5 w-5 shrink-0 text-terracotta-400" />
               <div>
-                <h2 className="font-display text-lg text-charcoal">
-                  Sobre Florale
-                </h2>
+                <h2 className="font-display text-lg text-charcoal">Sobre Florale</h2>
                 <p className="mt-3 leading-relaxed text-stone">
-                  Florale nace del amor por lo hecho a mano. Creemos en el valor
-                  de los objetos creados con dedicación, en la belleza de lo
-                  imperfecto y en el poder de un regalo pensado con el corazón.
-                </p>
-                <p className="mt-3 leading-relaxed text-stone">
-                  Trabajamos con artesanos locales que ponen su alma en cada
-                  pieza, utilizando materiales naturales y técnicas
-                  tradicionales que se transmiten de generación en generación.
+                  Florale nace del amor por lo hecho a mano. Creemos en el valor de los objetos
+                  creados con dedicación, en la belleza de lo imperfecto y en el poder de un regalo
+                  pensado con el corazón.
                 </p>
               </div>
             </div>
@@ -35,9 +50,7 @@ export default function InfoPage() {
             <div className="flex items-start gap-4">
               <ShoppingBag className="mt-1 h-5 w-5 shrink-0 text-terracotta-400" />
               <div>
-                <h2 className="font-display text-lg text-charcoal">
-                  Cómo comprar
-                </h2>
+                <h2 className="font-display text-lg text-charcoal">Cómo comprar</h2>
                 <div className="mt-5 space-y-5">
                   {[
                     {
@@ -66,9 +79,7 @@ export default function InfoPage() {
                         {step.number}
                       </span>
                       <div>
-                        <h3 className="text-sm font-medium text-charcoal">
-                          {step.title}
-                        </h3>
+                        <h3 className="text-sm font-medium text-charcoal">{step.title}</h3>
                         <p className="mt-0.5 text-sm text-stone">{step.desc}</p>
                       </div>
                     </div>
@@ -80,16 +91,45 @@ export default function InfoPage() {
 
           <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
             <div className="flex items-start gap-4">
-              <Leaf className="mt-1 h-5 w-5 shrink-0 text-terracotta-400" />
-              <div>
+              <ClipboardList className="mt-0.5 h-5 w-5 shrink-0 text-terracotta-400" />
+              <div className="w-full">
                 <h2 className="font-display text-lg text-charcoal">
-                  Hecho a mano
+                  Para agendar tu pedido necesitamos
                 </h2>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  {[
+                    { icon: User, label: 'Nombre de quien envía' },
+                    { icon: Heart, label: 'Nombre de quien recibe' },
+                    { icon: Calendar, label: 'Fecha de entrega' },
+                    { icon: Truck, label: 'Modalidad: envío o retiro' },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className="flex items-center gap-3 rounded-xl bg-cream px-4 py-3"
+                    >
+                      <item.icon className="h-4 w-4 shrink-0 text-terracotta-400" />
+                      <span className="text-sm text-stone">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
+            <div className="flex items-start gap-4">
+              <CreditCard className="mt-0.5 h-5 w-5 shrink-0 text-terracotta-400" />
+              <div>
+                <h2 className="font-display text-lg text-charcoal">Confirmación</h2>
                 <p className="mt-3 leading-relaxed text-stone">
-                  Cada pieza es única. Al ser productos artesanales, pueden
-                  existir pequeñas variaciones en color, forma y textura que los
-                  hacen especiales e irrepetibles.
+                  Para confirmar tu pedido, solicitamos una seña del 50% del valor total.
                 </p>
+                <div className="mt-4 flex items-center gap-3 rounded-xl bg-cream px-4 py-3">
+                  <Clock className="h-4 w-4 shrink-0 text-terracotta-400" />
+                  <span className="text-sm text-stone">
+                    Los pedidos se realizan de 24 a 48 horas antes
+                  </span>
+                </div>
               </div>
             </div>
           </section>
@@ -98,17 +138,27 @@ export default function InfoPage() {
             <div className="flex items-start gap-4">
               <Clock className="mt-1 h-5 w-5 shrink-0 text-terracotta-400" />
               <div>
-                <h2 className="font-display text-lg text-charcoal">
-                  Entregas
-                </h2>
+                <h2 className="font-display text-lg text-charcoal">Entregas</h2>
                 <p className="mt-3 leading-relaxed text-stone">
-                  Realizamos entregas en la ciudad con un costo adicional.
-                  También puedes retirar tu pedido sin costo adicional.
+                  Realizamos entregas en la ciudad con un costo adicional. También puedes retirar tu
+                  pedido sin costo adicional.
                 </p>
                 <p className="mt-2 leading-relaxed text-stone">
-                  Los pedidos se preparan con 24 a 48 horas de anticipación.
-                  Para fechas especiales, te recomendamos realizar tu pedido con
-                  mayor anticipación.
+                  Los pedidos se preparan con 24 a 48 horas de anticipación. Para fechas especiales,
+                  te recomendamos realizar tu pedido con mayor anticipación.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-stone-light/30">
+            <div className="flex items-start gap-4">
+              <Leaf className="mt-1 h-5 w-5 shrink-0 text-terracotta-400" />
+              <div>
+                <h2 className="font-display text-lg text-charcoal">Hecho a mano</h2>
+                <p className="mt-3 leading-relaxed text-stone">
+                  Cada pieza es única. Al ser productos artesanales, pueden existir pequeñas
+                  variaciones en color, forma y textura que los hacen especiales e irrepetibles.
                 </p>
               </div>
             </div>
@@ -116,15 +166,15 @@ export default function InfoPage() {
 
           <div className="text-center">
             <Link
-              href="/contacto"
+              href="/catalogo"
               className="inline-flex h-11 items-center gap-2 rounded-full bg-terracotta-500 px-6 text-sm font-medium text-white transition-all hover:bg-terracotta-600 hover:shadow-lg hover:shadow-terracotta-500/25 active:scale-[0.98]"
             >
-              <MessageCircle className="h-4 w-4" />
-              Consultanos
+              <ShoppingBag className="h-4 w-4" />
+              Ver productos
             </Link>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
