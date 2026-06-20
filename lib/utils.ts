@@ -1,0 +1,36 @@
+import type { Product } from '@/types'
+
+export function formatPrice(price: number): string {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price)
+}
+
+export function generateWhatsAppMessage(
+  items: { product: Product; quantity: number }[],
+  total: number,
+): string {
+  const lines = items.map(
+    ({ product, quantity }) =>
+      `• ${product.name} × ${quantity} — ${formatPrice(product.price * quantity)}`,
+  )
+
+  return [
+    '🌿 *Nuevo Pedido — Florale*',
+    '',
+    '━━━━━━━━━━━━━━━━',
+    '*🛒 Detalle del pedido:*',
+    '━━━━━━━━━━━━━━━━',
+    '',
+    ...lines,
+    '',
+    '━━━━━━━━━━━━━━━━',
+    `💫 *Total: ${formatPrice(total)}*`,
+    '━━━━━━━━━━━━━━━━',
+    '',
+    'Gracias por tu compra 💛',
+  ].join('\n')
+}

@@ -1,65 +1,89 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+import { Great_Vibes } from 'next/font/google';
+import Link from 'next/link';
+
+const greatVibes = Great_Vibes({
+  subsets: ['latin'],
+  weight: '400',
+});
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="relative grid h-screen w-full place-items-center overflow-hidden bg-gradient-to-b from-cream via-terracotta-50/20 to-cream">
+      <div
+        className="absolute inset-0 opacity-[0.20]"
+        style={{
+          backgroundImage: 'url(/background.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+
+      <div className="pointer-events-none absolute left-6 top-12 text-5xl text-terracotta-200/15 sm:left-16 sm:top-20 sm:text-6xl lg:text-7xl">
+        &#10046;
+      </div>
+      <div className="pointer-events-none absolute bottom-20 right-10 text-4xl text-terracotta-200/15 sm:bottom-28 sm:right-20 sm:text-5xl lg:text-6xl">
+        &#10047;
+      </div>
+      <div className="pointer-events-none absolute bottom-1/3 left-8 text-3xl text-terracotta-200/10 sm:text-4xl">
+        &#10086;
+      </div>
+      <div className="pointer-events-none absolute right-8 top-1/4 text-3xl text-gold-200/10 sm:text-4xl">
+        &#10087;
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center px-4">
+        <h1
+          className={`${greatVibes.className} text-7xl leading-none text-charcoal sm:text-8xl md:text-9xl lg:text-[10rem]`}
+        >
+          Floralé
+        </h1>
+
+        <p className="mt-5 text-xs uppercase tracking-[0.35em] text-stone sm:text-sm">
+          Regalos Únicos
+        </p>
+
+        <div className="mt-10 flex items-center gap-3">
+          <span className="h-px w-8 bg-charcoal sm:w-12" />
+          <span className="text-xs text-charcoal">&#10022;</span>
+          <span className="h-px w-8 bg-charcoal sm:w-12" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <Link
+          href="/catalogo"
+          className="group mt-10 inline-flex h-11 items-center gap-2.5 rounded-full border border-charcoal/20 px-7 text-sm font-medium tracking-wide text-charcoal transition-all hover:border-charcoal/60 hover:bg-charcoal hover:text-cream active:scale-[0.97]"
+        >
+          Entrar a la Tienda
+          <motion.span
+            className="inline-block"
+            initial={{ x: 0 }}
+            whileHover={{ x: 3 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            &#8594;
+          </motion.span>
+        </Link>
+      </div>
+
+      <motion.div
+        className="absolute bottom-6 text-stone-light/30"
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        >
+          <path d="M6 8l4 4 4-4" />
+        </svg>
+      </motion.div>
+    </main>
   );
 }

@@ -1,0 +1,197 @@
+'use client'
+
+import type { Product, Category } from '@/types'
+import { formatPrice } from '@/lib/utils'
+import { useCartStore } from '@/lib/cart-store'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useState } from 'react'
+import { Minus, Plus, ShoppingBag, ArrowLeft, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
+
+export function ProductDetailClient({
+  product,
+  relatedProducts,
+  category,
+}: {
+  product: Product
+  relatedProducts: Product[]
+  category: Category | null
+}) {
+  const addItem = useCartStore((s) => s.addItem)
+  const [quantity, setQuantity] = useState(1)
+  const [added, setAdded] = useState(false)
+
+  const handleAdd = () => {
+    addItem(product.id, quantity)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 2000)
+  }
+
+  return (
+    <main className="bg-cream px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <nav className="mb-6 flex items-center gap-2 text-sm text-stone">
+          <Link href="/catalogo" className="transition-colors hover:text-terracotta-500">
+            Inicio
+          </Link>
+          <span>/</span>
+          {category && (
+            <>
+              <Link
+                href={`/catalogo#${product.categoryId}`}
+                className="transition-colors hover:text-terracotta-500"
+              >
+                {category.name}
+              </Link>
+              <span>/</span>
+            </>
+          )}
+          <span className="text-charcoal">{product.name}</span>
+        </nav>
+
+        <Link
+          href="/catalogo"
+          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-stone transition-colors hover:text-terracotta-500"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Volver al catálogo
+        </Link>
+
+        <div className="grid gap-10 lg:grid-cols-2">
+          <div className="overflow-hidden rounded-2xl bg-stone-light/20">
+            <Image
+              src={product.image}
+              alt={product.name}
+              width={600}
+              height={600}
+              className="h-full w-full object-cover"
+              priority
+            />
+          </div>
+
+          <div className="flex flex-col justify-center">
+            {category && (
+              <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-terracotta-100 px-3 py-1 text-xs font-medium text-terracotta-600">
+                {category.emoji} {category.name}
+              </span>
+            )}
+
+            <h1 className="font-display text-3xl leading-tight text-charcoal sm:text-4xl">
+              {product.name}
+            </h1>
+
+            <p className="mt-4 leading-relaxed text-stone">{product.description}</p>
+
+            <p className="mt-6 font-display text-3xl text-terracotta-600">
+              {formatPrice(product.price)}
+            </p>
+
+            {product.features && product.features.length > 0 && (
+              <div className="mt-6 space-y-2">
+                <h3 className="text-xs font-medium uppercase tracking-wider text-charcoal/50">
+                  Características
+                </h3>
+                <ul className="space-y-1.5">
+                  {product.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-2 text-sm text-stone"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-terracotta-400" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="mt-8 flex items-center gap-3">
+              <div className="flex items-center gap-0.5 rounded-xl border border-stone-light/60">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="flex h-10 w-10 items-center justify-center text-stone transition-colors hover:text-charcoal"
+                  aria-label="Reducir cantidad"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span className="flex h-10 w-10 items-center justify-center text-sm font-medium text-charcoal">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="flex h-10 w-10 items-center justify-center text-stone transition-colors hover:text-charcoal"
+                  aria-label="Aumentar cantidad"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
+
+              <motion.button
+                onClick={handleAdd}
+                whileTap={{ scale: 0.97 }}
+                className={`flex h-10 flex-1 items-center justify-center gap-2 rounded-xl px-6 text-sm font-medium transition-all ${
+                  added
+                    ? 'bg-sage-500 text-white'
+                    : 'bg-terracotta-500 text-white hover:bg-terracotta-600 hover:shadow-lg hover:shadow-terracotta-500/25'
+                }`}
+              >
+                {added ? (
+                  <>
+                    <Check className="h-4 w-4" />
+                    Agregado
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="h-4 w-4" />
+                    Añadir al carrito — {formatPrice(product.price * quantity)}
+                  </>
+                )}
+              </motion.button>
+            </div>
+          </div>
+        </div>
+
+        {relatedProducts.length > 0 && (
+          <section className="mt-20 border-t border-stone-light/40 pt-12">
+            <h2 className="font-display text-2xl text-charcoal">
+              También te puede gustar
+            </h2>
+            <p className="mt-1 text-sm text-stone">
+              Descubre más productos{' '}
+              {category ? `de ${category.name.toLowerCase()}` : 'relacionados'}
+            </p>
+
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedProducts.slice(0, 3).map((rp) => (
+                <Link
+                  key={rp.id}
+                  href={`/producto/${rp.id}`}
+                  className="group"
+                >
+                  <div className="mb-3 overflow-hidden rounded-2xl bg-stone-light/20">
+                    <div className="aspect-square overflow-hidden">
+                      <Image
+                        src={rp.image}
+                        alt={rp.name}
+                        width={400}
+                        height={400}
+                        className="h-full w-full object-cover transition-all duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="font-display text-base text-charcoal">
+                    {rp.name}
+                  </h3>
+                  <p className="mt-0.5 font-medium text-terracotta-600">
+                    {formatPrice(rp.price)}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </main>
+  )
+}
