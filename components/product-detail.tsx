@@ -73,7 +73,7 @@ export function ProductDetailClient({
           <div className="flex flex-col justify-center">
             {category && (
               <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-terracotta-100 px-3 py-1 text-xs font-medium text-terracotta-600">
-                {category.emoji} {category.name}
+                {category.name}
               </span>
             )}
 
@@ -86,25 +86,6 @@ export function ProductDetailClient({
             <p className="mt-6 font-display text-3xl text-terracotta-600">
               {formatPrice(product.price)}
             </p>
-
-            {product.features && product.features.length > 0 && (
-              <div className="mt-6 space-y-2">
-                <h3 className="text-xs font-medium uppercase tracking-wider text-charcoal/50">
-                  Características
-                </h3>
-                <ul className="space-y-1.5">
-                  {product.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-center gap-2 text-sm text-stone"
-                    >
-                      <span className="h-1 w-1 rounded-full bg-terracotta-400" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
 
             <div className="mt-8 flex items-center gap-3">
               <div className="flex items-center gap-0.5 rounded-xl border border-stone-light/60">

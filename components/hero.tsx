@@ -1,4 +1,4 @@
-import { categories } from '@/lib/products'
+import { categories } from '@/lib/products';
 
 export function Hero() {
   return (
@@ -19,8 +19,8 @@ export function Hero() {
         </h1>
 
         <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-stone sm:mt-6 sm:text-lg">
-          Descubre nuestra colección de regalos únicos, hechos a mano con dedicación
-          por artesanos locales. Cada pieza cuenta una historia.
+          Descubre nuestra colección de regalos únicos, hechos a mano con dedicación por artesanos
+          locales. Cada pieza cuenta una historia.
         </p>
 
         <a
@@ -40,7 +40,6 @@ export function Hero() {
               href={`#${cat.id}`}
               className="group flex flex-col items-center gap-2 rounded-2xl bg-white/70 px-3 py-4 text-center shadow-sm ring-1 ring-stone-light/40 backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white hover:shadow-md"
             >
-              <span className="text-xl sm:text-2xl">{cat.emoji}</span>
               <span className="text-[11px] font-medium leading-tight text-charcoal sm:text-xs">
                 {cat.name.split(' ')[0]}
               </span>
@@ -51,5 +50,5 @@ export function Hero() {
 
       <div className="absolute left-1/2 top-0 -z-10 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-terracotta-200/20 blur-3xl" />
     </section>
-  )
+  );
 }
