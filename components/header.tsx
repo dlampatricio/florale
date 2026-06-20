@@ -2,7 +2,7 @@
 
 import { useCartStore } from '@/lib/cart-store';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Info, LayoutGrid, MessageCircle, ShoppingBag } from 'lucide-react';
+import { Info, LayoutGrid, MessageCircle, ShoppingCart } from 'lucide-react';
 import { Great_Vibes } from 'next/font/google';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -61,7 +61,7 @@ export function Header() {
               }`}
               aria-label={item.label}
             >
-              <item.icon className="h-[18px] w-[18px]" />
+              <item.icon className="h-4.5 w-4.5" />
             </Link>
           ))}
           <Link
@@ -69,7 +69,7 @@ export function Header() {
             className="relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-stone hover:bg-stone-light/30 hover:text-charcoal"
             aria-label="Carrito"
           >
-            <ShoppingBag className="h-[18px] w-[18px]" />
+            <ShoppingCart className="h-4.5 w-4.5" />
             <AnimatePresence>
               {totalItems > 0 && (
                 <motion.span

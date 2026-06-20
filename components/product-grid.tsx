@@ -13,7 +13,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
     return acc;
   }, {});
 
-  const categoryOrder = ['velas', 'jabones', 'ceramica', 'flores', 'difusores'] as const;
+  const categoryOrder = ['cajas', 'desayunos'] as const;
 
   return (
     <section id="catalogo" className="bg-cream px-4 pb-20 sm:px-6 lg:px-8">
@@ -29,7 +29,6 @@ export function ProductGrid({ products }: { products: Product[] }) {
           return (
             <div key={catId} id={catId} className="mb-14 scroll-mt-20">
               <div className="mb-6 flex items-center gap-3">
-                <span className="text-2xl">{category.emoji}</span>
                 <div>
                   <h3 className="font-display text-xl text-charcoal">{category.name}</h3>
                   <p className="text-sm text-stone">{category.description}</p>

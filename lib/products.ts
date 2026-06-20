@@ -1,145 +1,80 @@
-import type { Product, Category } from '@/types'
+import type { Category, Product } from '@/types';
 
 export const categories: Category[] = [
   {
-    id: 'velas',
-    name: 'Velas Aromáticas',
-    description: 'Velas hechas a mano con cera de soya y aceites esenciales naturales',
-    emoji: '🕯️',
+    id: 'cajas',
+    name: 'Cajas de Regalo',
+    description: 'Cajas de regalo con un diseño elegante y una variedad de productos',
   },
   {
-    id: 'jabones',
-    name: 'Jabones Artesanales',
-    description: 'Jabones naturales con ingredientes orgánicos y fragancias únicas',
-    emoji: '🧼',
+    id: 'desayunos',
+    name: 'Desayunos',
+    description:
+      'Desayunos deliciosos y saludables preparados con ingredientes frescos y orgánicos',
   },
-  {
-    id: 'ceramica',
-    name: 'Cerámica',
-    description: 'Piezas únicas de cerámica hechas a mano por artesanos locales',
-    emoji: '🏺',
-  },
-  {
-    id: 'flores',
-    name: 'Flores Secas',
-    description: 'Arreglos de flores preservadas que duran toda la vida',
-    emoji: '💐',
-  },
-  {
-    id: 'difusores',
-    name: 'Difusores',
-    description: 'Difusores de aroma con varillas y aceites esenciales puros',
-    emoji: '✨',
-  },
-]
+];
 
 export const products: Product[] = [
   {
-    id: 'vela-lavanda',
-    name: 'Vela Aromática de Lavanda',
+    id: 'corazon_red_oso',
+    name: 'Box de Corazón con Peluche Oso',
     description:
-      'Vela artesanal de cera de soya con aceite esencial puro de lavanda. Aroma relajante que perdura hasta 40 horas.',
-    price: 12000,
-    image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&h=600&fit=crop',
-    categoryId: 'velas',
-    features: ['40 horas de duración', 'Cera de soya natural', 'Aceite esencial puro', 'Mecha de algodón'],
+      'Elegante box en forma de corazón de cartón corrugado. Incluye un peluche de oso (colores según stock), 6 flores de cinta de raso (colores a elección), 6 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
+    price: 1850,
+    image: '/products/corazon_red_oso.jpg',
+    categoryId: 'cajas',
   },
   {
-    id: 'vela-vainilla',
-    name: 'Vela Aromática de Vainilla',
+    id: 'corazon_red',
+    name: 'Box Corazón Grande Red',
     description:
-      'Vela artesanal con aroma dulce y cálido a vainilla bourbon. Crea una atmósfera acogedora en cualquier espacio.',
-    price: 13000,
-    image: 'https://images.unsplash.com/photo-1600612253971-422e7f7faeb6?w=600&h=600&fit=crop',
-    categoryId: 'velas',
-    features: ['45 horas de duración', 'Cera de soya natural', 'Fragancia premium', 'Presentación en vidrio'],
+      'Box grande en forma de corazón de cartón corrugado. Incluye 8 flores de cinta de raso (colores a elección), 12 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
+    price: 1750,
+    image: '/products/corazon_red.jpg',
+    categoryId: 'cajas',
   },
   {
-    id: 'jabon-rosa',
-    name: 'Jabón Artesanal de Rosa',
+    id: 'girasol_bombones',
+    name: 'Box con Girasoles y Bombones',
     description:
-      'Jabón natural elaborado con pétalos de rosa secos, aceite de oliva y manteca de karité. Ideal para pieles sensibles.',
-    price: 8500,
-    image: 'https://images.unsplash.com/photo-1600857062245-4e2dce5e1a18?w=600&h=600&fit=crop',
-    categoryId: 'jabones',
-    features: ['Ingredientes 100% naturales', 'Aceite de oliva', 'Manteca de karité', 'Pétalos de rosa reales'],
+      'Caja rígida en forma de corazón decorada con cinta. Incluye un oso de peluche (color según stock), 4 girasoles de cinta amarillos, follaje artificial decorativo y 3 bombones Ferrero Rocher. Incluye tarjeta de felicitación gratuita. (Opcionales con costo: globo burbuja, globo de corazón metálico o pack adicional de 3 bombones Ferrero Rocher).',
+    price: 1650,
+    image: '/products/girasol_bombones.jpg',
+    categoryId: 'cajas',
   },
   {
-    id: 'jabon-miel',
-    name: 'Jabón de Miel y Avena',
+    id: 'girasol_peluche',
+    name: 'Box con Girasoles y Peluche',
     description:
-      'Jabón exfoliante suave con miel de abejas local y avena coloidal. Nutre y renueva la piel de forma natural.',
-    price: 9000,
-    image: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&h=600&fit=crop',
-    categoryId: 'jabones',
-    features: ['Exfoliante suave', 'Miel local', 'Avena coloidal', 'Sin químicos artificiales'],
+      'Caja rígida en forma de corazón decorada con cinta. Incluye un oso de peluche (color según stock), 4 girasoles de cinta amarillos, follaje artificial decorativo. Incluye tarjeta de felicitación gratuita. (Opcionales con costo: globo burbuja, globo de corazón metálico o pack adicional de 3 bombones Ferrero Rocher).',
+    price: 1450,
+    image: '/products/girasol_peluche.jpg',
+    categoryId: 'cajas',
   },
   {
-    id: 'maceta-ceramica',
-    name: 'Maceta Cerámica Hecha a Mano',
+    id: 'corazon_blue',
+    name: 'Box Corazón Grande Blue',
     description:
-      'Maceta de cerámica artesanal con esmaltado natural. Cada pieza es única con su propio carácter y textura.',
-    price: 15900,
-    image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&h=600&fit=crop',
-    categoryId: 'ceramica',
-    features: ['Hecha a mano', 'Esmaltado natural', 'Pieza única', 'Incluye plato base'],
+      'Box grande en forma de corazón de cartón corrugado. Incluye 8 flores de cinta de raso (colores a elección), 12 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
+    price: 1750,
+    image: '/products/corazon_blue.jpg',
+    categoryId: 'cajas',
   },
   {
-    id: 'tazas-ceramica',
-    name: 'Set de Tazas Artesanales (x2)',
+    id: 'corazon_purple_oso',
+    name: 'Box de Corazón con Peluche Oso',
     description:
-      'Par de tazas de cerámica hechas a torno. Perfectas para disfrutar de tu café o té con estilo artesanal.',
-    price: 22000,
-    image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=600&fit=crop',
-    categoryId: 'ceramica',
-    features: ['Set de 2 unidades', 'Hechas a torno', 'Capacidad 280ml', 'Esmalte apto para alimentos'],
+      'Elegante box en forma de corazón de cartón corrugado. Incluye un peluche de oso (colores según stock), 7 flores de cinta de raso (colores a elección), 12 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
+    price: 2150,
+    image: '/products/corazon_purple_oso.jpg',
+    categoryId: 'cajas',
   },
-  {
-    id: 'ramo-flores-secas',
-    name: 'Ramo de Flores Secas Eterno',
-    description:
-      'Arreglo de flores preservadas que mantienen su belleza por meses. Combinación de eucalipto, lavanda y trigo.',
-    price: 14500,
-    image: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&h=600&fit=crop',
-    categoryId: 'flores',
-    features: ['Duración de meses', 'Eucalipto natural', 'Lavanda presevada', 'Atado con yute artesanal'],
-  },
-  {
-    id: 'ramo-minimalista',
-    name: 'Mini Ramo Seco Boho',
-    description:
-      'Pequeño arreglo floral seco con estilo boho. Ideal para decoración de escritorio o espacios pequeños.',
-    price: 9500,
-    image: 'https://images.unsplash.com/photo-1589128777073-2636ae7d5a51?w=600&h=600&fit=crop',
-    categoryId: 'flores',
-    features: ['Formato compacto', 'Estilo boho-chic', 'Incluye maceta decorativa', 'Mantenimiento cero'],
-  },
-  {
-    id: 'difusor-lavanda',
-    name: 'Difusor de Lavanda y Eucalipto',
-    description:
-      'Difusor de varillas con aceite esencial de lavanda y eucalipto. Aroma fresco y natural que dura hasta 3 meses.',
-    price: 18500,
-    image: 'https://images.unsplash.com/photo-1613526951055-4a702bea2228?w=600&h=600&fit=crop',
-    categoryId: 'difusores',
-    features: ['Duración 3 meses', 'Varillas de rattan', 'Aceite esencial puro', 'Frasco de vidrio soplado'],
-  },
-  {
-    id: 'set-regalo',
-    name: '✨ Set de Regalo Bienestar',
-    description:
-      'Caja de regalo que incluye vela aromática, jabón artesanal y difusor. El regalo perfecto para consentir.',
-    price: 32000,
-    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238ae1d?w=600&h=600&fit=crop',
-    categoryId: 'difusores',
-    features: ['Vela aromática 30h', 'Jabón artesanal 100g', 'Difusor 100ml', 'Caja de regalo incluida'],
-  },
-]
+];
 
 export function getProductById(id: string): Product | undefined {
-  return products.find((p) => p.id === id)
+  return products.find((p) => p.id === id);
 }
 
 export function getProductsByCategory(categoryId: string): Product[] {
-  return products.filter((p) => p.categoryId === categoryId)
+  return products.filter((p) => p.categoryId === categoryId);
 }

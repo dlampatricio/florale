@@ -1,12 +1,12 @@
-import { Great_Vibes } from 'next/font/google'
-import { MessageCircle, Camera, Globe } from 'lucide-react'
+import { Camera, Globe, MessageCircle } from 'lucide-react';
+import { Great_Vibes } from 'next/font/google';
 
 const greatVibes = Great_Vibes({
   subsets: ['latin'],
   weight: '400',
-})
+});
 
-const WHATSAPP_NUMBER = '573001234567'
+const WHATSAPP_NUMBER = '59893705133';
 
 const socialLinks = [
   {
@@ -16,10 +16,11 @@ const socialLinks = [
     color: 'hover:bg-green-600 hover:text-white hover:shadow-green-600/25',
   },
   {
-    href: '#',
+    href: 'https://www.instagram.com/florale_regalosunicos?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     icon: Camera,
     label: 'Instagram',
-    color: 'hover:bg-gradient-to-tr hover:from-pink-500 hover:via-purple-500 hover:to-orange-400 hover:text-white hover:shadow-pink-500/25',
+    color:
+      'hover:bg-gradient-to-tr hover:from-pink-500 hover:via-purple-500 hover:to-orange-400 hover:text-white hover:shadow-pink-500/25',
   },
   {
     href: '#',
@@ -27,15 +28,13 @@ const socialLinks = [
     label: 'Facebook',
     color: 'hover:bg-blue-600 hover:text-white hover:shadow-blue-600/25',
   },
-]
+];
 
 export default function ContactoPage() {
   return (
     <main className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        <h1
-          className={`${greatVibes.className} text-center text-5xl text-charcoal sm:text-7xl`}
-        >
+        <h1 className={`${greatVibes.className} text-center text-5xl text-charcoal sm:text-7xl`}>
           Contacto
         </h1>
         <div className="mt-3 flex items-center justify-center gap-2">
@@ -71,5 +70,5 @@ export default function ContactoPage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

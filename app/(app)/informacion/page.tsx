@@ -36,9 +36,9 @@ export default function InfoPage() {
             <div className="flex items-start gap-4">
               <Store className="mt-1 h-5 w-5 shrink-0 text-terracotta-400" />
               <div>
-                <h2 className="font-display text-lg text-charcoal">Sobre Florale</h2>
+                <h2 className="font-display text-lg text-charcoal">Sobre Floralé</h2>
                 <p className="mt-3 leading-relaxed text-stone">
-                  Florale nace del amor por lo hecho a mano. Creemos en el valor de los objetos
+                  Floralé nace del amor por lo hecho a mano. Creemos en el valor de los objetos
                   creados con dedicación, en la belleza de lo imperfecto y en el poder de un regalo
                   pensado con el corazón.
                 </p>
