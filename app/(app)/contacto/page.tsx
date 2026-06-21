@@ -23,7 +23,7 @@ const socialLinks = [
       'hover:bg-gradient-to-tr hover:from-pink-500 hover:via-purple-500 hover:to-orange-400 hover:text-white hover:shadow-pink-500/25',
   },
   {
-    href: '#',
+    href: 'https://www.facebook.com/share/1GK9BoJuSC/?mibextid=wwXIfr',
     icon: Globe,
     label: 'Facebook',
     color: 'hover:bg-blue-600 hover:text-white hover:shadow-blue-600/25',

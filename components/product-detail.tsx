@@ -4,23 +4,23 @@ import { useCartStore } from '@/lib/cart-store';
 import { useToastStore } from '@/lib/toast-store';
 import { formatPrice } from '@/lib/utils';
 import type { Category, Product } from '@/types';
-import { ImageWithSkeleton } from './image-with-skeleton';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, ShoppingBag, X } from 'lucide-react';
+import { Check, ChevronRight, ShoppingBag, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { ImageWithSkeleton } from './image-with-skeleton';
 
 export function ProductDetailClient({
   product,
   relatedProducts,
-  category,
 }: {
   product: Product;
   relatedProducts: Product[];
   category: Category | null;
 }) {
   const addItem = useCartStore((s) => s.addItem);
+  const itemCount = useCartStore((s) => s.items.reduce((acc, i) => acc + i.quantity, 0));
   const addToast = useToastStore((s) => s.addToast);
   const [added, setAdded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -29,7 +29,6 @@ export function ProductDetailClient({
     addItem(product.id);
     addToast(`${product.name} agregado al carrito`);
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
   };
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -105,6 +104,17 @@ export function ProductDetailClient({
                   </>
                 )}
               </motion.button>
+
+              {itemCount > 0 && (
+                <Link
+                  href="/carrito"
+                  className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-terracotta-200 bg-white px-6 text-sm font-medium text-terracotta-600 transition-all hover:border-terracotta-300 hover:bg-terracotta-50"
+                >
+                  <ShoppingCart className="h-4 w-4" />
+                  Ir al carrito
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              )}
             </div>
           </div>
         </div>

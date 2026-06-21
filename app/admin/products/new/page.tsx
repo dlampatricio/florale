@@ -55,18 +55,18 @@ export default function NewProductPage() {
       addToast('Error: ' + error.message)
     } else {
       addToast('Producto creado correctamente')
-      router.push('/admin')
+      router.push('/admin/products')
     }
   }
 
   return (
     <div>
       <Link
-        href="/admin"
+        href="/admin/products"
         className="mb-4 inline-flex items-center gap-1 text-sm text-stone transition-colors hover:text-terracotta-600"
       >
         <ArrowLeft className="h-4 w-4" />
-        Volver al panel
+        Volver a productos
       </Link>
 
       <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-stone-light/30">
@@ -138,7 +138,7 @@ export default function NewProductPage() {
               {saving ? 'Guardando...' : 'Guardar producto'}
             </button>
             <Link
-              href="/admin"
+              href="/admin/products"
               className="text-sm text-stone underline-offset-2 hover:text-charcoal hover:underline"
             >
               Cancelar
