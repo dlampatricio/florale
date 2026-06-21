@@ -35,7 +35,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 </div>
               </div>
 
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 grid-cols-2 lg:grid-cols-3">
                 {catProducts.map((product) => {
                   const idx = startIndex + catProducts.indexOf(product);
                   return <ProductCard key={product.id} product={product} index={idx} />;

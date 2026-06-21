@@ -1,23 +1,17 @@
-'use client'
+'use client';
 
-import type { Product } from '@/types'
-import { formatPrice } from '@/lib/utils'
-import { useCartStore } from '@/lib/cart-store'
-import Image from 'next/image'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useCartStore } from '@/lib/cart-store';
+import { formatPrice } from '@/lib/utils';
+import type { Product } from '@/types';
+import { motion } from 'framer-motion';
+import { Plus } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
-export function ProductCard({
-  product,
-  index,
-}: {
-  product: Product
-  index: number
-}) {
-  const addItem = useCartStore((s) => s.addItem)
-  const [imgLoaded, setImgLoaded] = useState(false)
+export function ProductCard({ product, index }: { product: Product; index: number }) {
+  const addItem = useCartStore((s) => s.addItem);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
     <motion.article
@@ -43,7 +37,7 @@ export function ProductCard({
               />
             </div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-linear-to-t from-charcoal/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
         </Link>
 
@@ -58,15 +52,11 @@ export function ProductCard({
 
       <Link href={`/producto/${product.id}`}>
         <div className="space-y-1 px-1">
-          <h3 className="font-display text-lg leading-tight text-charcoal">
-            {product.name}
-          </h3>
+          <h3 className="font-display text-lg leading-tight text-charcoal">{product.name}</h3>
           <p className="line-clamp-2 text-sm text-stone">{product.description}</p>
-          <p className="pt-1 font-semibold text-terracotta-600">
-            {formatPrice(product.price)}
-          </p>
+          <p className="pt-1 font-semibold text-terracotta-600">{formatPrice(product.price)}</p>
         </div>
       </Link>
     </motion.article>
-  )
+  );
 }
