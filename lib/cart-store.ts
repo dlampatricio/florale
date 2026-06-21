@@ -3,9 +3,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface CartItem {
+export interface CartItem {
   productId: string
   quantity: number
+  note: string
 }
 
 interface CartState {
@@ -14,6 +15,7 @@ interface CartState {
   addItem: (productId: string, quantity?: number) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
+  updateNote: (productId: string, note: string) => void
   clearCart: () => void
   openDrawer: () => void
   closeDrawer: () => void
@@ -38,7 +40,7 @@ export const useCartStore = create<CartState>()(
               ),
             }
           }
-          return { items: [...state.items, { productId, quantity }] }
+          return { items: [...state.items, { productId, quantity, note: '' }] }
         }),
 
       removeItem: (productId) =>
@@ -53,6 +55,13 @@ export const useCartStore = create<CartState>()(
             : state.items.map((item) =>
                 item.productId === productId ? { ...item, quantity } : item,
               ),
+        })),
+
+      updateNote: (productId, note) =>
+        set((state) => ({
+          items: state.items.map((item) =>
+            item.productId === productId ? { ...item, note } : item,
+          ),
         })),
 
       clearCart: () => set({ items: [] }),

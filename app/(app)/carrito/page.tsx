@@ -1,13 +1,14 @@
 'use client';
 
 import { useCartStore } from '@/lib/cart-store';
+import { useToastStore } from '@/lib/toast-store';
 import { getProductById } from '@/lib/products';
 import { formatPrice, generateWhatsAppMessage } from '@/lib/utils';
-import type { Product } from '@/types';
-import { MessageCircle, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import { MessageCircle, Minus, PenLine, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { Great_Vibes } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const greatVibes = Great_Vibes({
   subsets: ['latin'],
@@ -17,14 +18,21 @@ const greatVibes = Great_Vibes({
 const WHATSAPP_NUMBER = '59893705133';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem } = useCartStore();
+  const { items, updateQuantity, removeItem, updateNote } = useCartStore();
+  const addToast = useToastStore((s) => s.addToast);
+  const [noteOpen, setNoteOpen] = useState<Record<string, boolean>>({});
 
   const cartProducts = items
     .map((item) => {
       const product = getProductById(item.productId);
-      return product ? { product, quantity: item.quantity } : null;
+      return product ? { product, quantity: item.quantity, note: item.note } : null;
     })
-    .filter((item): item is { product: Product; quantity: number } => item !== null);
+    .filter(
+      (item): item is { product: import('@/types').Product; quantity: number; note: string } =>
+        item !== null
+    );
+
+  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
   const total = cartProducts.reduce(
     (acc, { product, quantity }) => acc + product.price * quantity,
@@ -37,27 +45,30 @@ export default function CartPage() {
     window.open(url, '_blank');
   };
 
+  const handleRemove = (productId: string, name: string) => {
+    removeItem(productId);
+    addToast(`${name} eliminado del carrito`);
+  };
+
   return (
-    <main className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
+    <main className="bg-cream px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-8 items-center text-center justify-between">
-          <div>
-            <h1 className={`${greatVibes.className} text-5xl text-charcoal sm:text-7xl`}>
+        <div className="mb-6 text-center sm:mb-8">
+            <h1 className={`${greatVibes.className} text-4xl text-charcoal sm:text-7xl`}>
               Tu Carrito
             </h1>
-            <div className="mt-3 flex items-center justify-center gap-2">
-              <span className="h-px w-6 bg-terracotta-300/60" />
-              <span className="text-[10px] text-terracotta-400/60">&#10022;</span>
-              <span className="h-px w-6 bg-terracotta-300/60" />
-            </div>
-            <p className="mt-4 text-sm text-stone">
-              {items.length} {items.length === 1 ? 'producto' : 'productos'} en tu pedido
-            </p>
+            <div className="mt-2 flex items-center justify-center gap-2 sm:mt-3">
+            <span className="h-px w-6 bg-terracotta-300/60" />
+            <span className="text-[10px] text-terracotta-400/60">&#10022;</span>
+            <span className="h-px w-6 bg-terracotta-300/60" />
           </div>
+          <p className="mt-4 text-sm text-stone">
+            {totalItems} {totalItems === 1 ? 'producto' : 'productos'} en tu pedido
+          </p>
         </div>
 
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white px-6 py-20 text-center shadow-sm ring-1 ring-stone-light/30">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white px-4 py-16 text-center shadow-sm ring-1 ring-stone-light/30 sm:px-6 sm:py-20">
             <ShoppingBag className="h-16 w-16 text-stone-light" />
             <div>
               <p className="text-lg font-medium text-charcoal">Tu carrito está vacío</p>
@@ -73,81 +84,135 @@ export default function CartPage() {
         ) : (
           <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
             <div className="space-y-4">
-              {cartProducts.map(({ product, quantity }) => (
+              {cartProducts.map(({ product, quantity, note }) => {
+                const isOpen = noteOpen[product.id] ?? false;
+                return (
                 <div
                   key={product.id}
-                  className="flex gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30"
+                  className="rounded-xl bg-white shadow-sm"
                 >
-                  <Link
-                    href={`/producto/${product.id}`}
-                    className="h-24 w-24 shrink-0 overflow-hidden rounded-lg"
-                  >
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={96}
-                      height={96}
-                      className="h-full w-full object-cover"
-                    />
-                  </Link>
+                  <div className="flex gap-3 px-3 py-3 sm:px-4 sm:py-4">
+                    <Link
+                      href={`/producto/${product.id}`}
+                      className="h-20 w-20 shrink-0 overflow-hidden rounded-lg sm:h-24 sm:w-24"
+                    >
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={96}
+                        height={96}
+                        sizes="(max-width: 640px) 80px, 96px"
+                        className="h-full w-full object-cover"
+                      />
+                    </Link>
 
-                  <div className="flex flex-1 flex-col justify-between">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
+                    <div className="flex min-w-0 flex-1 flex-col justify-center">
+                      <div className="flex items-start justify-between gap-2">
                         <Link
                           href={`/producto/${product.id}`}
-                          className="font-display text-base text-charcoal transition-colors hover:text-terracotta-500"
+                          className="truncate font-display text-sm text-charcoal transition-colors hover:text-terracotta-500 sm:text-base"
                         >
                           {product.name}
                         </Link>
-                        <p className="text-sm text-stone">{formatPrice(product.price)} c/u</p>
+                        <button
+                          onClick={() => handleRemove(product.id, product.name)}
+                          className="shrink-0 rounded-lg p-1 text-stone-light transition-colors hover:bg-red-50 hover:text-red-500"
+                          aria-label={`Eliminar ${product.name}`}
+                        >
+                          <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                        </button>
                       </div>
-                      <button
-                        onClick={() => removeItem(product.id)}
-                        className="shrink-0 text-stone-light transition-colors hover:text-terracotta-500"
-                        aria-label={`Eliminar ${product.name}`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-0.5 rounded-lg border border-stone-light/50">
-                        <button
-                          onClick={() => updateQuantity(product.id, quantity - 1)}
-                          className="flex h-8 w-8 items-center justify-center text-stone transition-colors hover:text-charcoal"
-                          aria-label="Reducir cantidad"
-                        >
-                          <Minus className="h-3.5 w-3.5" />
-                        </button>
-                        <span className="flex h-8 w-10 items-center justify-center text-sm font-medium text-charcoal">
-                          {quantity}
+                      <p className="mt-0.5 text-xs text-stone sm:text-sm">
+                        {formatPrice(product.price)}
+                        <span className="text-stone-light"> c/u</span>
+                      </p>
+
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-0.5 rounded-lg border border-stone-light/30">
+                          <button
+                            onClick={() => updateQuantity(product.id, quantity - 1)}
+                            className="flex h-7 w-7 items-center justify-center rounded-l-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-charcoal active:bg-stone-light/40 sm:h-8 sm:w-8"
+                            aria-label="Reducir cantidad"
+                          >
+                            <Minus className="h-3 w-3" />
+                          </button>
+                          <span className="flex h-7 w-8 items-center justify-center text-xs font-medium text-charcoal sm:h-8">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(product.id, quantity + 1)}
+                            className="flex h-7 w-7 items-center justify-center rounded-r-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-charcoal active:bg-stone-light/40 sm:h-8 sm:w-8"
+                            aria-label="Aumentar cantidad"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        </div>
+                        <span className="text-sm font-semibold text-terracotta-600 sm:text-base">
+                          {formatPrice(product.price * quantity)}
                         </span>
-                        <button
-                          onClick={() => updateQuantity(product.id, quantity + 1)}
-                          className="flex h-8 w-8 items-center justify-center text-stone transition-colors hover:text-charcoal"
-                          aria-label="Aumentar cantidad"
-                        >
-                          <Plus className="h-3.5 w-3.5" />
-                        </button>
                       </div>
-                      <span className="font-semibold text-terracotta-600">
-                        {formatPrice(product.price * quantity)}
-                      </span>
                     </div>
                   </div>
+
+                  <div className="border-t border-stone-light/20 px-3 py-2 sm:px-4">
+                    {note && !isOpen ? (
+                      <button
+                        onClick={() => setNoteOpen((p) => ({ ...p, [product.id]: true }))}
+                        className="flex w-full items-center gap-1.5 text-xs text-stone transition-colors hover:text-terracotta-600"
+                      >
+                        <PenLine className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{note}</span>
+                      </button>
+                    ) : isOpen || note ? (
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={note}
+                          onChange={(e) => updateNote(product.id, e.target.value)}
+                          placeholder="Nota para tu pedido..."
+                          className="min-w-0 flex-1 rounded-lg border border-stone-light/30 bg-white px-3 py-1.5 text-xs text-charcoal placeholder:text-stone-light transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
+                        />
+                        <button
+                          onClick={() => {
+                            if (!note) setNoteOpen((p) => ({ ...p, [product.id]: false }));
+                          }}
+                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-stone-light transition-colors hover:bg-stone-light/20 hover:text-charcoal"
+                        >
+                          {note ? (
+                            <PenLine className="h-3 w-3" />
+                          ) : (
+                            <span className="text-sm leading-none">×</span>
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setNoteOpen((p) => ({ ...p, [product.id]: true }))}
+                        className="flex items-center gap-1.5 text-xs text-stone-light transition-colors hover:text-terracotta-600"
+                      >
+                        <PenLine className="h-3 w-3" />
+                        Agregar nota
+                      </button>
+                    )}
+                  </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
 
-            <div className="h-fit rounded-xl bg-white p-6 shadow-sm ring-1 ring-stone-light/30 lg:sticky lg:top-24">
-              <h2 className="font-display text-lg text-charcoal">Resumen</h2>
+            <div className="h-fit rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-6 lg:sticky lg:top-24">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 h-6 w-1 shrink-0 rounded-full bg-terracotta-400" />
+                <h2 className="font-display text-lg text-charcoal">Resumen</h2>
+              </div>
 
               <div className="mt-4 space-y-2">
-                {cartProducts.map(({ product, quantity }) => (
+                {cartProducts.map(({ product, quantity, note }) => (
                   <div key={product.id} className="flex items-center justify-between text-sm">
                     <span className="truncate text-stone">
                       {product.name} × {quantity}
+                      {note && <span className="ml-1 text-stone-light">✏️</span>}
                     </span>
                     <span className="shrink-0 font-medium text-charcoal">
                       {formatPrice(product.price * quantity)}

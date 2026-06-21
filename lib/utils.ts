@@ -10,13 +10,14 @@ export function formatPrice(price: number): string {
 }
 
 export function generateWhatsAppMessage(
-  items: { product: Product; quantity: number }[],
+  items: { product: Product; quantity: number; note?: string }[],
   total: number,
 ): string {
-  const lines = items.map(
-    ({ product, quantity }) =>
-      `• ${product.name} × ${quantity} — ${formatPrice(product.price * quantity)}`,
-  )
+  const lines = items.map(({ product, quantity, note }) => {
+    let line = `• ${product.name} × ${quantity} — ${formatPrice(product.price * quantity)}`
+    if (note) line += `\n   ✏️ ${note}`
+    return line
+  })
 
   return [
     '🌿 *Nuevo Pedido — Florale*',
