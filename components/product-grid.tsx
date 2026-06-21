@@ -1,12 +1,11 @@
-import { categories } from '@/lib/products';
-import type { Product } from '@/types';
+import type { Category, Product } from '@/types';
 import { ProductCard } from './product-card';
 
 interface GroupedProducts {
   [key: string]: Product[];
 }
 
-export function ProductGrid({ products }: { products: Product[] }) {
+export function ProductGrid({ products, categories }: { products: Product[]; categories: Category[] }) {
   const grouped = products.reduce<GroupedProducts>((acc, product) => {
     if (!acc[product.categoryId]) acc[product.categoryId] = [];
     acc[product.categoryId].push(product);

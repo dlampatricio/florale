@@ -1,5 +1,3 @@
-import { categories } from '@/lib/products';
-
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-terracotta-100/60 via-cream to-cream px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-24 lg:px-8">
@@ -34,14 +32,17 @@ export function Hero() {
 
       <div className="mx-auto mt-14 max-w-3xl sm:mt-16">
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 sm:gap-4">
-          {categories.map((cat) => (
+          {[
+            { id: 'cajas', label: 'Cajas' },
+            { id: 'desayunos', label: 'Desayunos' },
+          ].map((cat) => (
             <a
               key={cat.id}
               href={`#${cat.id}`}
               className="group flex flex-col items-center gap-2 rounded-2xl bg-white/70 px-3 py-4 text-center shadow-sm ring-1 ring-stone-light/40 backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white hover:shadow-md"
             >
               <span className="text-[11px] font-medium leading-tight text-charcoal sm:text-xs">
-                {cat.name.split(' ')[0]}
+                {cat.label}
               </span>
             </a>
           ))}

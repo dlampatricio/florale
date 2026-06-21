@@ -1,80 +1,58 @@
-import type { Category, Product } from '@/types';
+import type { Category, CategoryId, Product } from '@/types';
 
-export const categories: Category[] = [
-  {
-    id: 'cajas',
-    name: 'Cajas de Regalo',
-    description: 'Cajas de regalo con un diseño elegante y una variedad de productos',
-  },
-  {
-    id: 'desayunos',
-    name: 'Desayunos',
-    description:
-      'Desayunos deliciosos y saludables preparados con ingredientes frescos y orgánicos',
-  },
-];
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const products: Product[] = [
-  {
-    id: 'corazon_red_oso',
-    name: 'Box de Corazón con Peluche Oso',
-    description:
-      'Elegante box en forma de corazón de cartón corrugado. Incluye un peluche de oso (colores según stock), 6 flores de cinta de raso (colores a elección), 6 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
-    price: 1850,
-    image: '/products/corazon_red_oso.jpg',
-    categoryId: 'cajas',
-  },
-  {
-    id: 'corazon_red',
-    name: 'Box Corazón Grande Red',
-    description:
-      'Box grande en forma de corazón de cartón corrugado. Incluye 8 flores de cinta de raso (colores a elección), 12 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
-    price: 1750,
-    image: '/products/corazon_red.jpg',
-    categoryId: 'cajas',
-  },
-  {
-    id: 'girasol_bombones',
-    name: 'Box con Girasoles y Bombones',
-    description:
-      'Caja rígida en forma de corazón decorada con cinta. Incluye un oso de peluche (color según stock), 4 girasoles de cinta amarillos, follaje artificial decorativo y 3 bombones Ferrero Rocher. Incluye tarjeta de felicitación gratuita. (Opcionales con costo: globo burbuja, globo de corazón metálico o pack adicional de 3 bombones Ferrero Rocher).',
-    price: 1650,
-    image: '/products/girasol_bombones.jpg',
-    categoryId: 'cajas',
-  },
-  {
-    id: 'girasol_peluche',
-    name: 'Box con Girasoles y Peluche',
-    description:
-      'Caja rígida en forma de corazón decorada con cinta. Incluye un oso de peluche (color según stock), 4 girasoles de cinta amarillos, follaje artificial decorativo. Incluye tarjeta de felicitación gratuita. (Opcionales con costo: globo burbuja, globo de corazón metálico o pack adicional de 3 bombones Ferrero Rocher).',
-    price: 1450,
-    image: '/products/girasol_peluche.jpg',
-    categoryId: 'cajas',
-  },
-  {
-    id: 'corazon_blue',
-    name: 'Box Corazón Grande Blue',
-    description:
-      'Box grande en forma de corazón de cartón corrugado. Incluye 8 flores de cinta de raso (colores a elección), 12 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
-    price: 1750,
-    image: '/products/corazon_blue.jpg',
-    categoryId: 'cajas',
-  },
-  {
-    id: 'corazon_purple_oso',
-    name: 'Box de Corazón con Peluche Oso',
-    description:
-      'Elegante box en forma de corazón de cartón corrugado. Incluye un peluche de oso (colores según stock), 7 flores de cinta de raso (colores a elección), 12 bombones Ferrero Rocher, cinta de envoltura, lazo decorativo y una mariposa dorada. Se entrega con tarjeta de regalo.',
-    price: 2150,
-    image: '/products/corazon_purple_oso.jpg',
-    categoryId: 'cajas',
-  },
-];
+const headers = {
+  apikey: SUPABASE_ANON_KEY || '',
+  Authorization: `Bearer ${SUPABASE_ANON_KEY || ''}`,
+  'Content-Type': 'application/json',
+};
 
-export function getProductById(id: string): Product | undefined {
-  return products.find((p) => p.id === id);
+async function fetchFromSupabase<T>(path: string): Promise<T[]> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return [];
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
 }
 
-export function getProductsByCategory(categoryId: string): Product[] {
-  return products.filter((p) => p.categoryId === categoryId);
+export async function getProducts(): Promise<Product[]> {
+  const data = await fetchFromSupabase<Record<string, unknown>>(
+    'products?select=*&order=created_at.asc'
+  );
+  return data.map(mapProduct);
+}
+
+export async function getProductById(id: string): Promise<Product | undefined> {
+  const data = await fetchFromSupabase<Record<string, unknown>>(
+    `products?select=*&id=eq.${encodeURIComponent(id)}`
+  );
+  const product = data[0];
+  return product ? mapProduct(product) : undefined;
+}
+
+export async function getProductsByCategory(categoryId: string): Promise<Product[]> {
+  const data = await fetchFromSupabase<Record<string, unknown>>(
+    `products?select=*&category_id=eq.${encodeURIComponent(categoryId)}&order=created_at.asc`
+  );
+  return data.map(mapProduct);
+}
+
+export async function getCategories(): Promise<Category[]> {
+  return fetchFromSupabase<Category>('categories?select=*&order=id.asc');
+}
+
+function mapProduct(item: Record<string, unknown>): Product {
+  return {
+    id: item.id as string,
+    name: item.name as string,
+    description: (item.description as string) || '',
+    price: item.price as number,
+    image: (item.image as string) || '',
+    categoryId: item.category_id as CategoryId,
+  };
 }

@@ -1,5 +1,5 @@
 import { ProductGrid } from '@/components/product-grid';
-import { products } from '@/lib/products';
+import { getProducts, getCategories } from '@/lib/products';
 import { Great_Vibes } from 'next/font/google';
 
 const greatVibes = Great_Vibes({
@@ -7,7 +7,9 @@ const greatVibes = Great_Vibes({
   weight: '400',
 });
 
-export default function CatalogoPage() {
+export default async function CatalogoPage() {
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+
   return (
     <div className="bg-cream pb-20">
       <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 lg:px-8">
@@ -22,7 +24,7 @@ export default function CatalogoPage() {
           </div>
         </div>
       </div>
-      <ProductGrid products={products} />
+      <ProductGrid products={products} categories={categories} />
     </div>
   );
 }

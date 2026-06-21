@@ -1,18 +1,29 @@
 'use client'
 
 import { useCartStore } from '@/lib/cart-store'
-import { getProductById } from '@/lib/products'
+import { getProducts } from '@/lib/products'
+import type { Product } from '@/types'
 import { CartItem } from './cart-item'
 import { WhatsAppButton } from './whatsapp-button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingBag } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 export function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer } = useCartStore()
+  const [productMap, setProductMap] = useState<Record<string, Product>>({})
+
+  useEffect(() => {
+    getProducts().then((all) => {
+      const map: Record<string, Product> = {}
+      all.forEach((p) => { map[p.id] = p })
+      setProductMap(map)
+    })
+  }, [])
 
   const cartProducts = items
     .map((item) => {
-      const product = getProductById(item.productId)
+      const product = productMap[item.productId]
       return product ? { product, quantity: item.quantity } : null
     })
     .filter((item) => item !== null)

@@ -1,10 +1,6 @@
-import { products, getProductById, categories } from '@/lib/products'
+import { getProductById, getProducts, getCategories } from '@/lib/products'
 import { notFound } from 'next/navigation'
 import { ProductDetailClient } from '@/components/product-detail'
-
-export function generateStaticParams() {
-  return products.map((product) => ({ id: product.id }))
-}
 
 export default async function ProductPage({
   params,
@@ -12,13 +8,18 @@ export default async function ProductPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const product = getProductById(id)
+  const [product, allProducts, allCategories] = await Promise.all([
+    getProductById(id),
+    getProducts(),
+    getCategories(),
+  ])
+
   if (!product) notFound()
 
-  const relatedProducts = products.filter(
+  const relatedProducts = allProducts.filter(
     (p) => p.categoryId === product.categoryId && p.id !== product.id,
   )
-  const category = categories.find((c) => c.id === product.categoryId)
+  const category = allCategories.find((c) => c.id === product.categoryId)
 
   return (
     <ProductDetailClient

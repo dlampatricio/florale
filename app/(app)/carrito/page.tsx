@@ -2,14 +2,15 @@
 
 import { DatePicker } from '@/components/date-picker';
 import { useCartStore } from '@/lib/cart-store';
-import { getProductById } from '@/lib/products';
+import { getProducts } from '@/lib/products';
 import { useToastStore } from '@/lib/toast-store';
 import { formatPrice, generateWhatsAppMessage } from '@/lib/utils';
+import type { Product } from '@/types';
 import { MessageCircle, Minus, PenLine, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { Great_Vibes } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const greatVibes = Great_Vibes({
   subsets: ['latin'],
@@ -26,14 +27,23 @@ export default function CartPage() {
   const [recipient, setRecipient] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
+  const [productMap, setProductMap] = useState<Record<string, Product>>({});
+
+  useEffect(() => {
+    getProducts().then((all) => {
+      const map: Record<string, Product> = {};
+      all.forEach((p) => { map[p.id] = p });
+      setProductMap(map);
+    })
+  }, [])
 
   const cartProducts = items
     .map((item) => {
-      const product = getProductById(item.productId);
+      const product = productMap[item.productId];
       return product ? { product, quantity: item.quantity, note: item.note } : null;
     })
     .filter(
-      (item): item is { product: import('@/types').Product; quantity: number; note: string } =>
+      (item): item is { product: Product; quantity: number; note: string } =>
         item !== null
     );
 
