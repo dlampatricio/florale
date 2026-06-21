@@ -28,11 +28,15 @@ export function ProductGrid({ products }: { products: Product[] }) {
 
           return (
             <div key={catId} id={catId} className="mb-14 scroll-mt-20">
-              <div className="mb-6 flex items-center gap-3">
-                <div>
-                  <h3 className="font-display text-xl text-charcoal">{category.name}</h3>
-                  <p className="text-sm text-stone">{category.description}</p>
+              <div className="mb-6">
+                <div className="flex items-start gap-3">
+                  <div className="mt-1.5 h-8 w-1 shrink-0 rounded-full bg-terracotta-400" />
+                  <div>
+                    <h3 className="font-display text-2xl text-charcoal">{category.name}</h3>
+                    <p className="mt-0.5 text-sm text-stone">{category.description}</p>
+                  </div>
                 </div>
+                <hr className="mt-4 border-stone-light/30" />
               </div>
 
               <div className="grid gap-6 grid-cols-2 lg:grid-cols-3">

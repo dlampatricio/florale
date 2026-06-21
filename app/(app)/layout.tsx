@@ -1,4 +1,5 @@
 import { Header } from '@/components/header';
+import { ToastContainer } from '@/components/toast';
 import { Great_Vibes } from 'next/font/google';
 import Link from 'next/link';
 
@@ -21,6 +22,7 @@ export default function AppLayout({ children }: Readonly<{ children: React.React
 
       <div className="relative z-10">
         <Header />
+        <ToastContainer />
         {children}
       </div>
 
