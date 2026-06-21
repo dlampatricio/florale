@@ -29,10 +29,10 @@ export function ProductDetailClient({
   };
 
   return (
-    <main className="bg-cream px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl bg-stone-light/20">
+    <main className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr]">
+          <div className="overflow-hidden rounded-2xl bg-stone-light/20 max-md:max-h-[400px] md:max-h-[550px]">
             <Image
               src={product.image}
               alt={product.name}

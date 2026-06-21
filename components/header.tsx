@@ -18,6 +18,9 @@ const navItems = [
   { href: '/contacto', icon: MessageCircle, label: 'Contacto' },
 ];
 
+const activeClass = 'bg-terracotta-100 text-terracotta-600';
+const inactiveClass = 'text-stone hover:bg-stone-light/30 hover:text-charcoal';
+
 export function Header() {
   const pathname = usePathname();
   const items = useCartStore((s) => s.items);
@@ -55,9 +58,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                isActive(item.href)
-                  ? 'bg-terracotta-100 text-terracotta-600'
-                  : 'text-stone hover:bg-stone-light/30 hover:text-charcoal'
+                isActive(item.href) ? activeClass : inactiveClass
               }`}
               aria-label={item.label}
             >
@@ -66,7 +67,9 @@ export function Header() {
           ))}
           <Link
             href="/carrito"
-            className="relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-stone hover:bg-stone-light/30 hover:text-charcoal"
+            className={`relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+              pathname === '/carrito' ? activeClass : inactiveClass
+            }`}
             aria-label="Carrito"
           >
             <ShoppingCart className="h-4.5 w-4.5" />

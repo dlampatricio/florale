@@ -53,7 +53,6 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
       <Link href={`/producto/${product.id}`}>
         <div className="space-y-1 px-1">
           <h3 className="font-display text-lg leading-tight text-charcoal">{product.name}</h3>
-          <p className="line-clamp-2 text-sm text-stone">{product.description}</p>
           <p className="pt-1 font-semibold text-terracotta-600">{formatPrice(product.price)}</p>
         </div>
       </Link>

@@ -1,91 +1,67 @@
-'use client'
+'use client';
 
-import { useCartStore } from '@/lib/cart-store'
-import { getProductById } from '@/lib/products'
-import Link from 'next/link'
-import Image from 'next/image'
-import {
-  Minus,
-  Plus,
-  Trash2,
-  ShoppingBag,
-  ArrowLeft,
-  MessageCircle,
-} from 'lucide-react'
-import { formatPrice, generateWhatsAppMessage } from '@/lib/utils'
-import type { Product } from '@/types'
+import { useCartStore } from '@/lib/cart-store';
+import { getProductById } from '@/lib/products';
+import { formatPrice, generateWhatsAppMessage } from '@/lib/utils';
+import type { Product } from '@/types';
+import { MessageCircle, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import { Great_Vibes } from 'next/font/google';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const WHATSAPP_NUMBER = '573001234567'
+const greatVibes = Great_Vibes({
+  subsets: ['latin'],
+  weight: '400',
+});
+
+const WHATSAPP_NUMBER = '59893705133';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem, clearCart } = useCartStore()
+  const { items, updateQuantity, removeItem } = useCartStore();
 
   const cartProducts = items
     .map((item) => {
-      const product = getProductById(item.productId)
-      return product ? { product, quantity: item.quantity } : null
+      const product = getProductById(item.productId);
+      return product ? { product, quantity: item.quantity } : null;
     })
-    .filter(
-      (item): item is { product: Product; quantity: number } => item !== null,
-    )
+    .filter((item): item is { product: Product; quantity: number } => item !== null);
 
   const total = cartProducts.reduce(
     (acc, { product, quantity }) => acc + product.price * quantity,
-    0,
-  )
+    0
+  );
 
   const handleCheckout = () => {
-    const message = generateWhatsAppMessage(cartProducts, total)
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-    window.open(url, '_blank')
-  }
+    const message = generateWhatsAppMessage(cartProducts, total);
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-cream px-4 py-8 sm:px-6 lg:px-8">
+    <main className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-8 flex items-start justify-between">
+        <div className="mb-8 items-center text-center justify-between">
           <div>
-            <Link
-              href="/catalogo"
-              className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-stone transition-colors hover:text-terracotta-500"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Seguir comprando
-            </Link>
-            <h1 className="font-display text-2xl text-charcoal sm:text-3xl">
+            <h1 className={`${greatVibes.className} text-5xl text-charcoal sm:text-7xl`}>
               Tu Carrito
             </h1>
-            <div className="mt-2 flex items-center gap-2">
+            <div className="mt-3 flex items-center justify-center gap-2">
               <span className="h-px w-6 bg-terracotta-300/60" />
               <span className="text-[10px] text-terracotta-400/60">&#10022;</span>
               <span className="h-px w-6 bg-terracotta-300/60" />
             </div>
-            <p className="mt-3 text-sm text-stone">
-              {items.length} {items.length === 1 ? 'producto' : 'productos'} en
-              tu pedido
+            <p className="mt-4 text-sm text-stone">
+              {items.length} {items.length === 1 ? 'producto' : 'productos'} en tu pedido
             </p>
           </div>
-
-          {items.length > 0 && (
-            <button
-              onClick={clearCart}
-              className="mt-8 text-xs text-stone underline transition-colors hover:text-terracotta-500 sm:mt-0"
-            >
-              Vaciar carrito
-            </button>
-          )}
         </div>
 
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white px-6 py-20 text-center shadow-sm ring-1 ring-stone-light/30">
             <ShoppingBag className="h-16 w-16 text-stone-light" />
             <div>
-              <p className="text-lg font-medium text-charcoal">
-                Tu carrito está vacío
-              </p>
-              <p className="mt-1 text-sm text-stone">
-                Agrega productos desde nuestro catálogo
-              </p>
+              <p className="text-lg font-medium text-charcoal">Tu carrito está vacío</p>
+              <p className="mt-1 text-sm text-stone">Agrega productos desde nuestro catálogo</p>
             </div>
             <Link
               href="/catalogo"
@@ -124,9 +100,7 @@ export default function CartPage() {
                         >
                           {product.name}
                         </Link>
-                        <p className="text-sm text-stone">
-                          {formatPrice(product.price)} c/u
-                        </p>
+                        <p className="text-sm text-stone">{formatPrice(product.price)} c/u</p>
                       </div>
                       <button
                         onClick={() => removeItem(product.id)}
@@ -140,9 +114,7 @@ export default function CartPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-0.5 rounded-lg border border-stone-light/50">
                         <button
-                          onClick={() =>
-                            updateQuantity(product.id, quantity - 1)
-                          }
+                          onClick={() => updateQuantity(product.id, quantity - 1)}
                           className="flex h-8 w-8 items-center justify-center text-stone transition-colors hover:text-charcoal"
                           aria-label="Reducir cantidad"
                         >
@@ -152,9 +124,7 @@ export default function CartPage() {
                           {quantity}
                         </span>
                         <button
-                          onClick={() =>
-                            updateQuantity(product.id, quantity + 1)
-                          }
+                          onClick={() => updateQuantity(product.id, quantity + 1)}
                           className="flex h-8 w-8 items-center justify-center text-stone transition-colors hover:text-charcoal"
                           aria-label="Aumentar cantidad"
                         >
@@ -175,10 +145,7 @@ export default function CartPage() {
 
               <div className="mt-4 space-y-2">
                 {cartProducts.map(({ product, quantity }) => (
-                  <div
-                    key={product.id}
-                    className="flex items-center justify-between text-sm"
-                  >
+                  <div key={product.id} className="flex items-center justify-between text-sm">
                     <span className="truncate text-stone">
                       {product.name} × {quantity}
                     </span>
@@ -214,5 +181,5 @@ export default function CartPage() {
         )}
       </div>
     </main>
-  )
+  );
 }
