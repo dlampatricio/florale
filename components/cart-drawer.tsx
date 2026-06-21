@@ -4,6 +4,7 @@ import { useCartStore } from '@/lib/cart-store'
 import { getProducts } from '@/lib/products'
 import type { Product } from '@/types'
 import { CartItem } from './cart-item'
+import { Skeleton } from './skeleton'
 import { WhatsAppButton } from './whatsapp-button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingBag } from 'lucide-react'
@@ -12,12 +13,14 @@ import { useEffect, useState } from 'react'
 export function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer } = useCartStore()
   const [productMap, setProductMap] = useState<Record<string, Product>>({})
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getProducts().then((all) => {
       const map: Record<string, Product> = {}
       all.forEach((p) => { map[p.id] = p })
       setProductMap(map)
+      setLoading(false)
     })
   }, [])
 
@@ -68,7 +71,23 @@ export function CartDrawer() {
             </div>
 
             <div className="flex-1 overflow-y-auto px-5 py-4">
-              {cartProducts.length === 0 ? (
+              {loading ? (
+                <div className="space-y-3">
+                  {Array.from({ length: Math.min(items.length || 2, 3) }).map((_, i) => (
+                    <div key={i} className="flex gap-3 rounded-lg bg-white p-3 ring-1 ring-stone-light/20">
+                      <Skeleton className="h-16 w-16 shrink-0 rounded-lg" />
+                      <div className="flex flex-1 flex-col justify-center gap-1.5">
+                        <Skeleton className="h-3.5 w-3/4" />
+                        <Skeleton className="h-3 w-1/4" />
+                        <div className="mt-1 flex items-center gap-2">
+                          <Skeleton className="h-6 w-16 rounded-md" />
+                          <Skeleton className="h-4 w-12" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : cartProducts.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
                   <ShoppingBag className="h-12 w-12 text-stone-light" />
                   <p className="text-sm text-stone">Tu carrito está vacío</p>

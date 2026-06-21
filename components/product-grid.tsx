@@ -12,21 +12,17 @@ export function ProductGrid({ products, categories }: { products: Product[]; cat
     return acc;
   }, {});
 
-  const categoryOrder = ['cajas', 'desayunos'] as const;
-
   return (
     <section id="catalogo" className="bg-cream px-4 pb-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        {categoryOrder.map((catId) => {
-          const catProducts = grouped[catId];
+        {categories.map((category) => {
+          const catProducts = grouped[category.id];
           if (!catProducts) return null;
-          const category = categories.find((c) => c.id === catId);
-          if (!category) return null;
 
           const startIndex = products.indexOf(catProducts[0]);
 
           return (
-            <div key={catId} id={catId} className="mb-14 scroll-mt-20">
+            <div key={category.id} id={category.id} className="mb-14 scroll-mt-20">
               <div className="mb-6">
                 <div className="flex items-start gap-3">
                   <div className="mt-1.5 h-8 w-1 shrink-0 rounded-full bg-terracotta-400" />

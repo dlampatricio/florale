@@ -4,6 +4,7 @@ import { useCartStore } from '@/lib/cart-store';
 import { useToastStore } from '@/lib/toast-store';
 import { formatPrice } from '@/lib/utils';
 import type { Category, Product } from '@/types';
+import { ImageWithSkeleton } from './image-with-skeleton';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, ShoppingBag, X } from 'lucide-react';
 import Image from 'next/image';
@@ -57,12 +58,12 @@ export function ProductDetailClient({
             className="w-full overflow-hidden rounded-2xl bg-stone-light/20 ring-1 ring-stone-light/30 transition-all duration-300 hover:ring-terracotta-300/50 hover:shadow-lg hover:shadow-stone/10 text-left cursor-zoom-in"
           >
             <div className="aspect-square">
-              <Image
+              <ImageWithSkeleton
                 src={product.image}
                 alt={product.name}
                 width={600}
                 height={600}
-                className="h-full w-full object-cover"
+                className="h-full w-full"
                 priority
               />
             </div>
@@ -123,13 +124,13 @@ export function ProductDetailClient({
               {relatedProducts.slice(0, 6).map((rp) => (
                 <Link key={rp.id} href={`/producto/${rp.id}`} className="group">
                   <div className="mb-3 overflow-hidden rounded-2xl bg-stone-light/20 ring-1 ring-stone-light/30 transition-all duration-300 group-hover:ring-terracotta-300/50 group-hover:shadow-lg group-hover:shadow-stone/10">
-                    <div className="aspect-square overflow-hidden">
-                      <Image
+                    <div className="aspect-square">
+                      <ImageWithSkeleton
                         src={rp.image}
                         alt={rp.name}
                         width={400}
                         height={400}
-                        className="h-full w-full object-cover transition-all duration-500"
+                        className="h-full w-full"
                       />
                     </div>
                   </div>
@@ -171,7 +172,7 @@ export function ProductDetailClient({
                 alt={product.name}
                 width={1200}
                 height={1200}
-                className="h-auto w-full object-contain"
+                className="h-auto max-h-[90vh] w-full object-contain"
                 priority
               />
             </motion.div>

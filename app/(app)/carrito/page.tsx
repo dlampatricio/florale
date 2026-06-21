@@ -1,14 +1,15 @@
 'use client';
 
 import { DatePicker } from '@/components/date-picker';
+import { Skeleton } from '@/components/skeleton';
 import { useCartStore } from '@/lib/cart-store';
 import { getProducts } from '@/lib/products';
 import { useToastStore } from '@/lib/toast-store';
 import { formatPrice, generateWhatsAppMessage } from '@/lib/utils';
 import type { Product } from '@/types';
+import { ImageWithSkeleton } from '@/components/image-with-skeleton';
 import { MessageCircle, Minus, PenLine, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { Great_Vibes } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -28,12 +29,14 @@ export default function CartPage() {
   const [deliveryDate, setDeliveryDate] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [productMap, setProductMap] = useState<Record<string, Product>>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getProducts().then((all) => {
       const map: Record<string, Product> = {};
       all.forEach((p) => { map[p.id] = p });
       setProductMap(map);
+      setLoading(false);
     })
   }, [])
 
@@ -91,7 +94,53 @@ export default function CartPage() {
           </p>
         </div>
 
-        {items.length === 0 ? (
+        {loading && items.length > 0 ? (
+          <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+            <div className="space-y-4">
+              {Array.from({ length: items.length }).map((_, i) => (
+                <div key={i} className="flex gap-3 rounded-xl bg-white p-3 shadow-sm sm:p-4">
+                  <Skeleton className="h-20 w-20 shrink-0 rounded-lg sm:h-24 sm:w-24" />
+                  <div className="flex flex-1 flex-col justify-center gap-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/4" />
+                    <div className="mt-1 flex items-center justify-between">
+                      <Skeleton className="h-7 w-20 rounded-lg" />
+                      <Skeleton className="h-5 w-16" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-4 rounded-xl bg-white p-4 shadow-sm sm:p-6">
+              <Skeleton className="h-6 w-24" />
+              <div className="space-y-2">
+                {Array.from({ length: items.length }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-14" />
+                  </div>
+                ))}
+              </div>
+              <Skeleton className="h-px w-full" />
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-5 w-12" />
+                <Skeleton className="h-7 w-20" />
+              </div>
+              <Skeleton className="h-px w-full" />
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-11 w-full rounded-lg" />
+                <Skeleton className="h-11 w-full rounded-lg" />
+                <Skeleton className="h-11 w-full rounded-lg" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-9 flex-1 rounded-lg" />
+                  <Skeleton className="h-9 flex-1 rounded-lg" />
+                </div>
+              </div>
+              <Skeleton className="h-12 w-full rounded-xl" />
+            </div>
+          </div>
+        ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white px-4 py-16 text-center shadow-sm ring-1 ring-stone-light/30 sm:px-6 sm:py-20">
             <ShoppingBag className="h-16 w-16 text-stone-light" />
             <div>
@@ -117,13 +166,13 @@ export default function CartPage() {
                         href={`/producto/${product.id}`}
                         className="h-20 w-20 shrink-0 overflow-hidden rounded-lg sm:h-24 sm:w-24"
                       >
-                        <Image
+                        <ImageWithSkeleton
                           src={product.image}
                           alt={product.name}
                           width={96}
                           height={96}
                           sizes="(max-width: 640px) 80px, 96px"
-                          className="h-full w-full object-cover"
+                          className="h-full w-full"
                         />
                       </Link>
 

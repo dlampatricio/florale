@@ -3,7 +3,7 @@
 import type { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/lib/cart-store'
-import Image from 'next/image'
+import { ImageWithSkeleton } from './image-with-skeleton'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 
 export function CartItem({ product }: { product: Product }) {
@@ -13,13 +13,13 @@ export function CartItem({ product }: { product: Product }) {
 
   return (
     <div className="flex gap-3 rounded-xl bg-white p-3 shadow-sm ring-1 ring-stone-light/30">
-      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg">
-        <Image
+      <div className="h-20 w-20 shrink-0 rounded-lg">
+        <ImageWithSkeleton
           src={product.image}
           alt={product.name}
           width={80}
           height={80}
-          className="h-full w-full object-cover"
+          className="h-full w-full rounded-lg"
         />
       </div>
 

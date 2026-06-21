@@ -58,3 +58,21 @@ CREATE POLICY "Authenticated can delete products" ON products FOR DELETE USING (
 CREATE POLICY "Authenticated can insert categories" ON categories FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Authenticated can update categories" ON categories FOR UPDATE USING (auth.role() = 'authenticated');
 CREATE POLICY "Authenticated can delete categories" ON categories FOR DELETE USING (auth.role() = 'authenticated');
+
+-- 9. Crear bucket de Storage para imágenes de productos
+INSERT INTO storage.buckets (id, name, public) VALUES ('product-images', 'product-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- 10. Políticas para el bucket: cualquiera puede leer imágenes
+CREATE POLICY "Public can read product images"
+ON storage.objects FOR SELECT USING (bucket_id = 'product-images');
+
+-- 11. Solo autenticados pueden subir/actualizar/eliminar imágenes
+CREATE POLICY "Authenticated can upload product images"
+ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated can update product images"
+ON storage.objects FOR UPDATE USING (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated can delete product images"
+ON storage.objects FOR DELETE USING (bucket_id = 'product-images' AND auth.role() = 'authenticated');

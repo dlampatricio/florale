@@ -1,22 +1,34 @@
 'use client'
 
+import { ImageUpload } from '@/components/image-upload'
 import { supabase } from '@/lib/supabase'
 import { useToastStore } from '@/lib/toast-store'
+import type { Category } from '@/types'
 import { ArrowLeft, Save } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function NewProductPage() {
   const router = useRouter()
   const addToast = useToastStore((s) => s.addToast)
 
+  const [categories, setCategories] = useState<Category[]>([])
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
-  const [categoryId, setCategoryId] = useState('cajas')
+  const [categoryId, setCategoryId] = useState('')
   const [image, setImage] = useState('')
   const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    supabase.from('categories').select('*').order('name').then(({ data }) => {
+      if (data) {
+        setCategories(data as Category[])
+        if (data.length > 0) setCategoryId(data[0].id)
+      }
+    })
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,13 +46,13 @@ export default function NewProductPage() {
       description,
       price: parseInt(price, 10),
       category_id: categoryId,
-      image: image || `/products/${id}.jpg`,
+      image,
     })
 
     setSaving(false)
 
     if (error) {
-      addToast(`Error: ${error.message}`)
+      addToast('Error: ' + error.message)
     } else {
       addToast('Producto creado correctamente')
       router.push('/admin')
@@ -104,27 +116,16 @@ export default function NewProductPage() {
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="w-full rounded-lg border border-stone-light/30 bg-white px-3 py-2.5 text-sm text-charcoal transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
               >
-                <option value="cajas">Cajas de Regalo</option>
-                <option value="desayunos">Desayunos</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
               </select>
             </div>
 
             <div className="sm:col-span-2">
-              <label className="mb-1 block text-xs font-medium text-charcoal">
-                URL de la imagen{' '}
-                <span className="text-stone-light font-normal">
-                  (dejá vacío para usar /products/[id].jpg)
-                </span>
-              </label>
-              <input
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                placeholder="/products/mi-producto.jpg"
-                className="w-full rounded-lg border border-stone-light/30 bg-white px-3 py-2.5 text-sm text-charcoal placeholder:text-stone-light transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
-              />
+              <label className="mb-1 block text-xs font-medium text-charcoal">Imagen</label>
+              <ImageUpload value={image} onChange={setImage} />
             </div>
-
           </div>
 
           <div className="flex items-center gap-3 pt-2">

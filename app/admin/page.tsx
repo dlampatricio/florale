@@ -1,37 +1,62 @@
 'use client'
 
 import { supabase } from '@/lib/supabase'
+import { useToastStore } from '@/lib/toast-store'
 import { formatPrice } from '@/lib/utils'
-import type { Product } from '@/types'
+import type { Category, Product } from '@/types'
+import { ImageWithSkeleton } from '@/components/image-with-skeleton'
 import { motion } from 'framer-motion'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const addToast = useToastStore((s) => s.addToast)
 
-  const loadProducts = useCallback(async () => {
-    const { data } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (data) setProducts(data as Product[])
+  const loadData = useCallback(async () => {
+    const [prodRes, catRes] = await Promise.all([
+      supabase.from('products').select('*').order('created_at', { ascending: false }),
+      supabase.from('categories').select('*').order('name'),
+    ])
+    if (prodRes.data) {
+      setProducts((prodRes.data as Record<string, unknown>[]).map((p) => ({
+        id: String(p.id),
+        name: String(p.name),
+        description: String(p.description || ''),
+        price: Number(p.price),
+        image: String(p.image || ''),
+        categoryId: String(p.category_id),
+      })))
+    }
+    if (catRes.data) setCategories(catRes.data as Category[])
     setLoading(false)
   }, [])
 
-  useEffect(() => { loadProducts() }, [loadProducts])
+  useEffect(() => { loadData() }, [loadData])
 
   const handleDelete = async (id: string) => {
-    if (!confirm('¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.')) return
+    if (!confirm('¿Estás seguro de eliminar este producto?')) return
     setDeleting(id)
-    await supabase.from('products').delete().eq('id', id)
-    setProducts((p) => p.filter((pr) => pr.id !== id))
+    const { error } = await supabase.from('products').delete().eq('id', id)
+    if (error) {
+      addToast('Error al eliminar: ' + error.message)
+    } else {
+      setProducts((p) => p.filter((pr) => pr.id !== id))
+      addToast('Producto eliminado')
+    }
     setDeleting(null)
   }
+
+  const grouped = categories
+    .map((cat) => ({
+      category: cat,
+      products: products.filter((p) => p.categoryId === cat.id),
+    }))
+    .filter((g) => g.products.length > 0)
 
   if (loading) {
     return (
@@ -70,46 +95,59 @@ export default function AdminDashboard() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
-          {products.map((product, i) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.03 }}
-              className="flex items-center gap-4 rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-stone-light/30"
-            >
-              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-stone-light/20">
-                {product.image && (
-                  <Image src={product.image} alt={product.name} width={56} height={56} className="h-full w-full object-cover" />
-                )}
+        <div className="space-y-8">
+          {grouped.map(({ category, products: catProducts }) => (
+            <div key={category.id}>
+              <div className="mb-3 flex items-center gap-2">
+                <div className="h-5 w-1 rounded-full bg-terracotta-400" />
+                <h2 className="font-display text-lg text-charcoal">{category.name}</h2>
+                <span className="rounded-full bg-stone-light/20 px-2 py-0.5 text-xs text-stone">
+                  {catProducts.length}
+                </span>
               </div>
+              <div className="space-y-2">
+                {catProducts.map((product, i) => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03 }}
+                    className="flex items-center gap-4 rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-stone-light/30"
+                  >
+                    <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-stone-light/20">
+                      {product.image && (
+                        <ImageWithSkeleton src={product.image} alt={product.name} width={56} height={56} className="h-full w-full" />
+                      )}
+                    </div>
 
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-charcoal">{product.name}</p>
-                <p className="text-xs text-stone">{product.categoryId === 'cajas' ? 'Cajas de Regalo' : 'Desayunos'} · {formatPrice(product.price)}</p>
-              </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-charcoal">{product.name}</p>
+                      <p className="text-xs text-stone">{formatPrice(product.price)}</p>
+                    </div>
 
-              <div className="flex items-center gap-1">
-                <Link
-                  href={`/admin/products/${product.id}/edit`}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-terracotta-600"
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                </Link>
-                <button
-                  onClick={() => handleDelete(product.id)}
-                  disabled={deleting === product.id}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-stone transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-50"
-                >
-                  {deleting === product.id ? (
-                    <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-400 border-t-transparent" />
-                  ) : (
-                    <Trash2 className="h-3.5 w-3.5" />
-                  )}
-                </button>
+                    <div className="flex items-center gap-1">
+                      <Link
+                        href={`/admin/products/${product.id}/edit`}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-terracotta-600"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        disabled={deleting === product.id}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-stone transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-50"
+                      >
+                        {deleting === product.id ? (
+                          <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-400 border-t-transparent" />
+                        ) : (
+                          <Trash2 className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       )}

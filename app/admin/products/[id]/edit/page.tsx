@@ -1,8 +1,9 @@
 'use client'
 
+import { ImageUpload } from '@/components/image-upload'
 import { supabase } from '@/lib/supabase'
 import { useToastStore } from '@/lib/toast-store'
-import type { Product } from '@/types'
+import type { Category, Product } from '@/types'
 import { ArrowLeft, Save } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -14,25 +15,30 @@ export default function EditProductPage() {
   const addToast = useToastStore((s) => s.addToast)
 
   const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState<Category[]>([])
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
-  const [categoryId, setCategoryId] = useState('cajas')
+  const [categoryId, setCategoryId] = useState('')
   const [image, setImage] = useState('')
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    supabase.from('products').select('*').eq('id', id).single().then(({ data, error }) => {
-      if (error || !data) {
+    Promise.all([
+      supabase.from('products').select('*').eq('id', id).single(),
+      supabase.from('categories').select('*').order('name'),
+    ]).then(([prodRes, catRes]) => {
+      if (prodRes.error || !prodRes.data) {
         router.push('/admin')
         return
       }
-      const p = data as Product
+      const p = prodRes.data as Product
       setName(p.name)
       setDescription(p.description)
       setPrice(p.price.toString())
       setCategoryId(p.categoryId)
       setImage(p.image)
+      if (catRes.data) setCategories(catRes.data as Category[])
       setLoading(false)
     })
   }, [id, router])
@@ -56,7 +62,7 @@ export default function EditProductPage() {
     setSaving(false)
 
     if (error) {
-      addToast(`Error: ${error.message}`)
+      addToast('Error: ' + error.message)
     } else {
       addToast('Producto actualizado correctamente')
       router.push('/admin')
@@ -125,21 +131,16 @@ export default function EditProductPage() {
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="w-full rounded-lg border border-stone-light/30 bg-white px-3 py-2.5 text-sm text-charcoal transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
               >
-                <option value="cajas">Cajas de Regalo</option>
-                <option value="desayunos">Desayunos</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
               </select>
             </div>
 
             <div className="sm:col-span-2">
-              <label className="mb-1 block text-xs font-medium text-charcoal">URL de la imagen</label>
-              <input
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="w-full rounded-lg border border-stone-light/30 bg-white px-3 py-2.5 text-sm text-charcoal placeholder:text-stone-light transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
-              />
+              <label className="mb-1 block text-xs font-medium text-charcoal">Imagen</label>
+              <ImageUpload value={image} onChange={setImage} />
             </div>
-
           </div>
 
           <div className="flex items-center gap-3 pt-2">

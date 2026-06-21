@@ -1,4 +1,4 @@
-import type { Category, CategoryId, Product } from '@/types';
+import type { Category, Product } from '@/types';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -53,6 +53,6 @@ function mapProduct(item: Record<string, unknown>): Product {
     description: (item.description as string) || '',
     price: item.price as number,
     image: (item.image as string) || '',
-    categoryId: item.category_id as CategoryId,
+    categoryId: String(item.category_id),
   };
 }

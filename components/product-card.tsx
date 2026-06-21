@@ -4,16 +4,14 @@ import { useCartStore } from '@/lib/cart-store';
 import { useToastStore } from '@/lib/toast-store';
 import { formatPrice } from '@/lib/utils';
 import type { Product } from '@/types';
+import { ImageWithSkeleton } from './image-with-skeleton';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 export function ProductCard({ product, index }: { product: Product; index: number }) {
   const addItem = useCartStore((s) => s.addItem);
   const addToast = useToastStore((s) => s.addToast);
-  const [imgLoaded, setImgLoaded] = useState(false);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -33,15 +31,12 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
       <Link href={`/producto/${product.id}`}>
         <div className="relative overflow-hidden rounded-2xl bg-stone-light/20 ring-1 ring-stone-light/30 transition-all duration-300 group-hover:ring-terracotta-300/50 group-hover:shadow-lg group-hover:shadow-stone/10">
           <div className="aspect-square overflow-hidden">
-            <Image
+            <ImageWithSkeleton
               src={product.image}
               alt={product.name}
               width={600}
               height={600}
-              onLoad={() => setImgLoaded(true)}
-              className={`h-full w-full object-cover transition-all duration-500 ${
-                imgLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
+              className="h-full w-full"
             />
           </div>
 

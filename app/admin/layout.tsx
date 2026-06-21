@@ -1,7 +1,7 @@
 'use client'
 
 import { supabase } from '@/lib/supabase'
-import { LogOut, Package } from 'lucide-react'
+import { LayoutList, LogOut, Package } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -52,6 +52,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               Panel de Administración
             </Link>
             <div className="flex items-center gap-3">
+              <Link
+                href="/admin/categories"
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-stone transition-colors hover:bg-stone-light/20 hover:text-terracotta-600"
+              >
+                <LayoutList className="h-3.5 w-3.5" />
+                Categorías
+              </Link>
               <Link href="/" className="text-xs text-stone underline-offset-2 hover:underline">
                 Ver tienda
               </Link>

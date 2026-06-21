@@ -33,7 +33,9 @@ export function DatePicker({
   onChange: (v: string) => void
 }) {
   const [open, setOpen] = useState(false)
+  const [upward, setUpward] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const today = new Date()
   const parsed = value ? parseDate(value) : null
@@ -47,6 +49,15 @@ export function DatePicker({
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
+
+  function handleOpen() {
+    const rect = inputRef.current?.getBoundingClientRect()
+    if (rect) {
+      const spaceBelow = window.innerHeight - rect.bottom
+      setUpward(spaceBelow < 340)
+    }
+    setOpen(true)
+  }
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth)
   const firstDay = getFirstDayOfMonth(viewYear, viewMonth)
@@ -73,11 +84,13 @@ export function DatePicker({
   return (
     <div ref={ref} className="relative">
       <input
+        ref={inputRef}
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setOpen(true)}
+        onFocus={handleOpen}
         placeholder=" "
+        readOnly
         className="peer w-full rounded-lg border border-stone-light/30 bg-white px-3 pt-5 pb-1.5 text-xs text-charcoal transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20 cursor-pointer"
       />
       <span className="pointer-events-none absolute left-3 top-1.5 text-[10px] font-medium text-stone transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:text-stone-light peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-medium peer-focus:text-charcoal">
@@ -87,11 +100,13 @@ export function DatePicker({
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.97 }}
+            initial={{ opacity: 0, y: upward ? 4 : -4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            exit={{ opacity: 0, y: upward ? 4 : -4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 top-full z-50 mt-1 w-72 rounded-xl bg-white p-4 shadow-lg ring-1 ring-stone-light/20"
+            className={`absolute left-0 z-50 mt-1 w-72 rounded-xl bg-white p-4 shadow-lg ring-1 ring-stone-light/20 ${
+              upward ? 'bottom-full mb-1' : 'top-full'
+            }`}
           >
             <div className="mb-3 flex items-center justify-between">
               <button

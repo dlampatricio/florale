@@ -4,13 +4,11 @@ export interface Product {
   description: string;
   price: number;
   image: string;
-  categoryId: CategoryId;
+  categoryId: string;
 }
 
-export type CategoryId = 'cajas' | 'desayunos';
-
 export interface Category {
-  id: CategoryId;
+  id: string;
   name: string;
   description: string;
 }
