@@ -33,7 +33,7 @@ export default function NewProductPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name || !price) {
-      addToast('Completá los campos obligatorios')
+      addToast('Completa los campos obligatorios')
       return
     }
 

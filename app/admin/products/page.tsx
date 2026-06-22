@@ -6,13 +6,14 @@ import { useToastStore } from '@/lib/toast-store';
 import { formatPrice } from '@/lib/utils';
 import type { Category, Product } from '@/types';
 import { motion } from 'framer-motion';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import { Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
   const addToast = useToastStore((s) => s.addToast);
@@ -55,10 +56,14 @@ export default function AdminProductsPage() {
     setDeleting(null);
   };
 
+  const filtered = search.trim()
+    ? products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
+    : products;
+
   const grouped = categories
     .map((cat) => ({
       category: cat,
-      products: products.filter((p) => p.categoryId === cat.id),
+      products: filtered.filter((p) => p.categoryId === cat.id),
     }))
     .filter((g) => g.products.length > 0);
 
@@ -86,17 +91,37 @@ export default function AdminProductsPage() {
         </Link>
       </div>
 
-      {products.length === 0 ? (
+      <div className="relative mb-6">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-light" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar producto por nombre..."
+          className="w-full rounded-lg border border-stone-light/30 bg-white py-2.5 pl-9 pr-3 text-sm text-charcoal placeholder:text-stone-light transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
+        />
+      </div>
+
+      {filtered.length === 0 ? (
         <div className="rounded-xl bg-white px-6 py-16 text-center shadow-sm ring-1 ring-stone-light/30">
-          <p className="text-lg font-medium text-charcoal">No hay productos todavía</p>
-          <p className="mt-1 text-sm text-stone">Agregá tu primer producto para empezar</p>
-          <Link
-            href="/admin/products/new"
-            className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-lg bg-terracotta-500 px-4 text-sm font-medium text-white transition-all hover:bg-terracotta-600"
-          >
-            <Plus className="h-4 w-4" />
-            Crear producto
-          </Link>
+          {search.trim() ? (
+            <>
+              <p className="text-lg font-medium text-charcoal">Sin resultados</p>
+              <p className="mt-1 text-sm text-stone">No hay productos que coincidan con "{search}"</p>
+            </>
+          ) : (
+            <>
+              <p className="text-lg font-medium text-charcoal">No hay productos todavía</p>
+              <p className="mt-1 text-sm text-stone">Agregá tu primer producto para empezar</p>
+              <Link
+                href="/admin/products/new"
+                className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-lg bg-terracotta-500 px-4 text-sm font-medium text-white transition-all hover:bg-terracotta-600"
+              >
+                <Plus className="h-4 w-4" />
+                Crear producto
+              </Link>
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-8">

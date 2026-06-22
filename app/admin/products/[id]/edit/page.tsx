@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { ImageUpload } from '@/components/image-upload'
-import { supabase } from '@/lib/supabase'
-import { useToastStore } from '@/lib/toast-store'
-import type { Category, Product } from '@/types'
-import { ArrowLeft, Save } from 'lucide-react'
-import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { ImageUpload } from '@/components/image-upload';
+import { supabase } from '@/lib/supabase';
+import { useToastStore } from '@/lib/toast-store';
+import type { Category } from '@/types';
+import { ArrowLeft, Save } from 'lucide-react';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function EditProductPage() {
-  const { id } = useParams<{ id: string }>()
-  const router = useRouter()
-  const addToast = useToastStore((s) => s.addToast)
+  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const addToast = useToastStore((s) => s.addToast);
 
-  const [loading, setLoading] = useState(true)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
-  const [categoryId, setCategoryId] = useState('')
-  const [image, setImage] = useState('')
-  const [saving, setSaving] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [image, setImage] = useState('');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -29,52 +29,55 @@ export default function EditProductPage() {
       supabase.from('categories').select('*').order('name'),
     ]).then(([prodRes, catRes]) => {
       if (prodRes.error || !prodRes.data) {
-        router.push('/admin/products')
-        return
+        router.push('/admin/products');
+        return;
       }
-      const p = prodRes.data as Product
-      setName(p.name)
-      setDescription(p.description)
-      setPrice(p.price.toString())
-      setCategoryId(p.categoryId)
-      setImage(p.image)
-      if (catRes.data) setCategories(catRes.data as Category[])
-      setLoading(false)
-    })
-  }, [id, router])
+      const p = prodRes.data as Record<string, unknown>;
+      setName(p.name as string);
+      setDescription((p.description as string) || '');
+      setPrice(String(p.price));
+      setCategoryId(String(p.category_id ?? ''));
+      setImage((p.image as string) || '');
+      if (catRes.data) setCategories(catRes.data as Category[]);
+      setLoading(false);
+    });
+  }, [id, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!name || !price) {
-      addToast('Completá los campos obligatorios')
-      return
+      addToast('Completá los campos obligatorios');
+      return;
     }
 
-    setSaving(true)
-    const { error } = await supabase.from('products').update({
-      name,
-      description,
-      price: parseInt(price, 10),
-      category_id: categoryId,
-      image,
-    }).eq('id', id)
+    setSaving(true);
+    const { error } = await supabase
+      .from('products')
+      .update({
+        name,
+        description,
+        price: parseInt(price, 10),
+        category_id: categoryId,
+        image,
+      })
+      .eq('id', id);
 
-    setSaving(false)
+    setSaving(false);
 
     if (error) {
-      addToast('Error: ' + error.message)
+      addToast('Error: ' + error.message);
     } else {
-      addToast('Producto actualizado correctamente')
-      router.push('/admin')
+      addToast('Producto actualizado correctamente');
+      router.push('/admin/products');
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-terracotta-500 border-t-transparent" />
       </div>
-    )
+    );
   }
 
   return (
@@ -132,7 +135,9 @@ export default function EditProductPage() {
                 className="w-full rounded-lg border border-stone-light/30 bg-white px-3 py-2.5 text-sm text-charcoal transition-colors focus:border-terracotta-400 focus:outline-none focus:ring-1 focus:ring-terracotta-400/20"
               >
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -162,5 +167,5 @@ export default function EditProductPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }
