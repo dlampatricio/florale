@@ -33,7 +33,6 @@ export function DatePicker({
   onChange: (v: string) => void
 }) {
   const [open, setOpen] = useState(false)
-  const [upward, setUpward] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -51,11 +50,6 @@ export function DatePicker({
   }, [])
 
   function handleOpen() {
-    const rect = inputRef.current?.getBoundingClientRect()
-    if (rect) {
-      const spaceBelow = window.innerHeight - rect.bottom
-      setUpward(spaceBelow < 340)
-    }
     setOpen(true)
   }
 
@@ -100,13 +94,11 @@ export function DatePicker({
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: upward ? 4 : -4, scale: 0.97 }}
+            initial={{ opacity: 0, y: 4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: upward ? 4 : -4, scale: 0.97 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className={`absolute left-0 z-50 mt-1 w-72 rounded-xl bg-white p-4 shadow-lg ring-1 ring-stone-light/20 ${
-              upward ? 'bottom-full mb-1' : 'top-full'
-            }`}
+            className="absolute left-0 z-50 bottom-full mb-1 w-72 rounded-xl bg-white p-4 shadow-lg ring-1 ring-stone-light/20"
           >
             <div className="mb-3 flex items-center justify-between">
               <button
