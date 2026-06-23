@@ -12,7 +12,7 @@ const headers = {
 async function fetchFromSupabase<T>(path: string): Promise<T[]> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return [];
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers });
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers, cache: 'no-store' });
     if (!res.ok) return [];
     return await res.json();
   } catch {
