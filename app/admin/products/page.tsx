@@ -112,7 +112,7 @@ export default function AdminProductsPage() {
           ) : (
             <>
               <p className="text-lg font-medium text-charcoal">No hay productos todavía</p>
-              <p className="mt-1 text-sm text-stone">Agregá tu primer producto para empezar</p>
+              <p className="mt-1 text-sm text-stone">Agrega tu primer producto para empezar</p>
               <Link
                 href="/admin/products/new"
                 className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-lg bg-terracotta-500 px-4 text-sm font-medium text-white transition-all hover:bg-terracotta-600"

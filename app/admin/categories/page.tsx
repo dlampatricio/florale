@@ -66,7 +66,7 @@ export default function AdminCategoriesPage() {
       {categories.length === 0 ? (
         <div className="rounded-xl bg-white px-6 py-16 text-center shadow-sm ring-1 ring-stone-light/30">
           <p className="text-lg font-medium text-charcoal">No hay categorías todavía</p>
-          <p className="mt-1 text-sm text-stone">Creá tu primera categoría para organizar los productos</p>
+          <p className="mt-1 text-sm text-stone">Crea tu primera categoría para organizar los productos</p>
           <Link
             href="/admin/categories/new"
             className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-lg bg-terracotta-500 px-4 text-sm font-medium text-white transition-all hover:bg-terracotta-600"

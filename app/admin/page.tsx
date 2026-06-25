@@ -1,30 +1,29 @@
-'use client'
+'use client';
 
-import { supabase } from '@/lib/supabase'
-import type { Category, Product } from '@/types'
-import { ExternalLink, LayoutList, Package, Plus } from 'lucide-react'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase';
+import { ExternalLink, LayoutList, Package, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function AdminDashboard() {
-  const [productCount, setProductCount] = useState(0)
-  const [categoryCount, setCategoryCount] = useState(0)
+  const [productCount, setProductCount] = useState(0);
+  const [categoryCount, setCategoryCount] = useState(0);
 
   useEffect(() => {
     Promise.all([
       supabase.from('products').select('*', { count: 'exact', head: true }),
       supabase.from('categories').select('*', { count: 'exact', head: true }),
     ]).then(([prodRes, catRes]) => {
-      if (prodRes.count !== null) setProductCount(prodRes.count)
-      if (catRes.count !== null) setCategoryCount(catRes.count)
-    })
-  }, [])
+      if (prodRes.count !== null) setProductCount(prodRes.count);
+      if (catRes.count !== null) setCategoryCount(catRes.count);
+    });
+  }, []);
 
   return (
     <div>
       <div className="mb-8">
         <h1 className="font-display text-2xl text-charcoal">Panel de Administración</h1>
-        <p className="mt-1 text-sm text-stone">Gestioná los productos y categorías de Florale</p>
+        <p className="mt-1 text-sm text-stone">Gestiona los productos y categorías de Florale</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -54,7 +53,8 @@ export default function AdminDashboard() {
           </div>
           <h2 className="font-display text-lg text-charcoal">Categorías</h2>
           <p className="mt-0.5 text-sm text-stone">
-            {categoryCount} {categoryCount === 1 ? 'categoría registrada' : 'categorías registradas'}
+            {categoryCount}{' '}
+            {categoryCount === 1 ? 'categoría registrada' : 'categorías registradas'}
           </p>
           <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-sage-600 transition-colors group-hover:text-sage-700">
             <LayoutList className="h-3 w-3" />
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
             <ExternalLink className="h-5 w-5 text-stone-600" />
           </div>
           <h2 className="font-display text-lg text-charcoal">Ver Tienda</h2>
-          <p className="mt-0.5 text-sm text-stone">Mirá cómo se ve el catálogo desde el frente</p>
+          <p className="mt-0.5 text-sm text-stone">Mira cómo se ve el catálogo desde el frente</p>
           <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-stone-600 transition-colors group-hover:text-stone-700">
             <ExternalLink className="h-3 w-3" />
             Abrir tienda
@@ -79,5 +79,5 @@ export default function AdminDashboard() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

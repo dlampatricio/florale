@@ -1,13 +1,13 @@
 'use client';
 
 import { DatePicker } from '@/components/date-picker';
+import { ImageWithSkeleton } from '@/components/image-with-skeleton';
 import { Skeleton } from '@/components/skeleton';
 import { useCartStore } from '@/lib/cart-store';
 import { getProducts } from '@/lib/products';
 import { useToastStore } from '@/lib/toast-store';
 import { formatPrice, generateWhatsAppMessage } from '@/lib/utils';
 import type { Product } from '@/types';
-import { ImageWithSkeleton } from '@/components/image-with-skeleton';
 import { MessageCircle, Minus, PenLine, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { Great_Vibes } from 'next/font/google';
 import Link from 'next/link';
@@ -34,21 +34,20 @@ export default function CartPage() {
   useEffect(() => {
     getProducts().then((all) => {
       const map: Record<string, Product> = {};
-      all.forEach((p) => { map[p.id] = p });
+      all.forEach((p) => {
+        map[p.id] = p;
+      });
       setProductMap(map);
       setLoading(false);
-    })
-  }, [])
+    });
+  }, []);
 
   const cartProducts = items
     .map((item) => {
       const product = productMap[item.productId];
       return product ? { product, quantity: item.quantity, note: item.note } : null;
     })
-    .filter(
-      (item): item is { product: Product; quantity: number; note: string } =>
-        item !== null
-    );
+    .filter((item): item is { product: Product; quantity: number; note: string } => item !== null);
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -278,11 +277,10 @@ export default function CartPage() {
               </div>
 
               <div className="mt-4 space-y-2">
-                {cartProducts.map(({ product, quantity, note }) => (
+                {cartProducts.map(({ product, quantity }) => (
                   <div key={product.id} className="flex items-center justify-between text-sm">
                     <span className="truncate text-stone">
                       {product.name} × {quantity}
-                      {note && <span className="ml-1 text-stone-light">✏️</span>}
                     </span>
                     <span className="shrink-0 font-medium text-charcoal">
                       {formatPrice(product.price * quantity)}
