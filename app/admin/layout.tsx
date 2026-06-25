@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen bg-stone-50">
       {session && !isLoginPage && (
         <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur-sm">
-          <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-3 sm:px-4">
+          <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-3 sm:px-4">
             <Link
               href="/admin"
               className="flex items-center gap-2 text-sm font-medium text-charcoal"
