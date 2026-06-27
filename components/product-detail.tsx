@@ -5,7 +5,7 @@ import { useToastStore } from '@/lib/toast-store';
 import { formatPrice } from '@/lib/utils';
 import type { Category, Product } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, ChevronRight, ShoppingBag, ShoppingCart, X } from 'lucide-react';
+import { Check, ChevronRight, Share2, ShoppingBag, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
@@ -24,6 +24,18 @@ export function ProductDetailClient({
   const addToast = useToastStore((s) => s.addToast);
   const [added, setAdded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      await navigator.share({ title: product.name, url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const handleAdd = () => {
     addItem(product.id);
@@ -78,9 +90,22 @@ export function ProductDetailClient({
 
             <p className="mt-4 leading-relaxed text-stone">{product.description}</p>
 
-            <p className="mt-6 font-display text-3xl text-terracotta-600">
-              {formatPrice(product.price)}
-            </p>
+            <div className="mt-6 flex items-center gap-4">
+              <p className="font-display text-3xl text-terracotta-600">
+                {formatPrice(product.price)}
+              </p>
+              <button
+                onClick={handleShare}
+                className="ml-auto flex h-10 w-10 items-center justify-center rounded-xl border border-stone-light/40 text-stone transition-all hover:border-terracotta-300 hover:bg-terracotta-50 hover:text-terracotta-600"
+                aria-label="Compartir producto"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-sage-500" />
+                ) : (
+                  <Share2 className="h-4 w-4" />
+                )}
+              </button>
+            </div>
 
             <div className="mt-8">
               <motion.button

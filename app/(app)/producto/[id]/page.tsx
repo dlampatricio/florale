@@ -1,6 +1,36 @@
+import type { Metadata } from 'next'
 import { getProductById, getProducts, getCategories } from '@/lib/products'
 import { notFound } from 'next/navigation'
 import { ProductDetailClient } from '@/components/product-detail'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const product = await getProductById(id)
+
+  if (!product) {
+    return { title: 'Producto no encontrado — Florale' }
+  }
+
+  return {
+    title: `${product.name} — Florale`,
+    description: product.description || 'Producto artesanal único en Florale.',
+    openGraph: {
+      title: `${product.name} — Florale`,
+      description: product.description || 'Producto artesanal único en Florale.',
+      images: product.image ? [{ url: product.image, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.name} — Florale`,
+      description: product.description || 'Producto artesanal único en Florale.',
+      images: product.image ? [product.image] : [],
+    },
+  }
+}
 
 export default async function ProductPage({
   params,

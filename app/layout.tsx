@@ -13,9 +13,23 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: 'Floralé — Regalos Artesanales',
+  metadataBase: new URL('https://florale-uy.vercel.app'),
+  title: 'Floralé — Regalos Artesanales Hechos a Mano con Amor',
   description:
     'Descubre regalos artesanales únicos, hechos a mano con amor por artesanos locales. Velas, jabones, cerámica y más.',
+  openGraph: {
+    title: 'Floralé — Regalos Artesanales Hechos a Mano con Amor',
+    description:
+      'Descubre regalos artesanales únicos, hechos a mano con amor por artesanos locales. Velas, jabones, cerámica y más.',
+    siteName: 'Floralé',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Floralé — Regalos Artesanales Hechos a Mano con Amor',
+    description:
+      'Descubre regalos artesanales únicos, hechos a mano con amor por artesanos locales.',
+  },
 };
 
 export default function RootLayout({
