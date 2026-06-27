@@ -36,11 +36,20 @@ export function renderContent(backgroundSrc: string): ReactElement {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: `url(${backgroundSrc})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundColor: '#fbf6ef',
+        position: 'relative',
       }}
     >
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `url(${backgroundSrc})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.2,
+        }}
+      />
       <div
         style={{
           fontSize: 140,
@@ -48,6 +57,7 @@ export function renderContent(backgroundSrc: string): ReactElement {
           color: '#2c2a26',
           fontFamily: '"Great Vibes"',
           lineHeight: 1,
+          position: 'relative',
         }}
       >
         Floralé
