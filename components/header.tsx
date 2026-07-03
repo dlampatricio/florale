@@ -63,6 +63,7 @@ export function Header() {
               aria-label={item.label}
             >
               <item.icon className="h-4.5 w-4.5" />
+              <span className="sr-only">{item.label}</span>
             </Link>
           ))}
           <Link
@@ -73,6 +74,7 @@ export function Header() {
             aria-label="Carrito"
           >
             <ShoppingCart className="h-4.5 w-4.5" />
+            <span className="sr-only">Carrito</span>
             <AnimatePresence>
               {totalItems > 0 && (
                 <motion.span

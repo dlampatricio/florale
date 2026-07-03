@@ -58,6 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <nav className="flex items-center gap-0.5 sm:gap-1">
               <Link
                 href="/admin/products"
+                aria-label="Productos"
                 className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-terracotta-600 sm:w-auto sm:gap-1.5 sm:px-2.5"
               >
                 <Package className="h-4 w-4" />
@@ -69,6 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
               <Link
                 href="/admin/categories"
+                aria-label="Categorías"
                 className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-terracotta-600 sm:w-auto sm:gap-1.5 sm:px-2.5"
               >
                 <LayoutList className="h-4 w-4" />
@@ -81,6 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 href="/"
                 target="_blank"
+                aria-label="Ver tienda"
                 className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-charcoal sm:w-auto sm:gap-1.5 sm:px-2.5"
               >
                 <ExternalLink className="h-4 w-4" />

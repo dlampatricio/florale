@@ -163,6 +163,7 @@ export default function CartPage() {
                     <div className="flex gap-3 px-3 py-3 sm:px-4 sm:py-4">
                       <Link
                         href={`/producto/${product.id}`}
+                        aria-label={product.name}
                         className="h-20 w-20 shrink-0 overflow-hidden rounded-lg sm:h-24 sm:w-24"
                       >
                         <ImageWithSkeleton

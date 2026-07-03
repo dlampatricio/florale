@@ -28,7 +28,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
       transition={{ duration: 0.5, delay: index * 0.08 }}
       className="group transition-all duration-300 hover:-translate-y-0.5"
     >
-      <Link href={`/producto/${product.id}`}>
+      <Link href={`/producto/${product.id}`} aria-label={product.name}>
         <div className="relative overflow-hidden rounded-2xl bg-stone-light/20 ring-1 ring-stone-light/30 transition-all duration-300 group-hover:ring-terracotta-300/50 group-hover:shadow-lg group-hover:shadow-stone/10">
           <div className="aspect-square overflow-hidden">
             <ImageWithSkeleton
