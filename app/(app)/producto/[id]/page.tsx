@@ -18,6 +18,9 @@ export async function generateMetadata({
   return {
     title: `${product.name} — Florale`,
     description: product.description || 'Producto artesanal único en Florale.',
+    alternates: {
+      canonical: `/producto/${id}`,
+    },
     openGraph: {
       title: `${product.name} — Florale`,
       description: product.description || 'Producto artesanal único en Florale.',
