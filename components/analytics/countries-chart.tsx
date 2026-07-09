@@ -12,7 +12,7 @@ interface CountriesChartProps {
 export function CountriesChart({ data, loading }: CountriesChartProps) {
   if (loading) {
     return (
-      <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+      <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
         <Skeleton className="mb-4 h-4 w-28" />
         <Skeleton className="h-40 w-full rounded-lg" />
       </div>
@@ -20,7 +20,7 @@ export function CountriesChart({ data, loading }: CountriesChartProps) {
   }
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
       <h3 className="mb-4 font-display text-sm font-medium text-charcoal">Países</h3>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">

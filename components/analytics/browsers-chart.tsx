@@ -14,7 +14,7 @@ const COLORS = ['#d46c4a', '#7c9a7c', '#e8c17a', '#a8a29e', '#8b7e74', '#c4b5a5'
 export function BrowsersChart({ data, loading }: BrowsersChartProps) {
   if (loading) {
     return (
-      <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+      <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
         <Skeleton className="mb-4 h-4 w-28" />
         <div className="flex items-center justify-center">
           <Skeleton className="h-40 w-40 rounded-full" />
@@ -24,10 +24,10 @@ export function BrowsersChart({ data, loading }: BrowsersChartProps) {
   }
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
       <h3 className="mb-4 font-display text-sm font-medium text-charcoal">Navegadores</h3>
-      <div className="flex h-48 items-center justify-center gap-4">
-        <div className="h-full w-1/2">
+      <div className="flex flex-col items-center justify-center gap-4 md:h-48 md:flex-row">
+        <div className="h-40 w-full md:h-full md:w-1/2">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -54,7 +54,7 @@ export function BrowsersChart({ data, loading }: BrowsersChartProps) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="space-y-1.5 text-xs">
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs md:block md:space-y-1.5">
           {data.slice(0, 5).map((item, i) => (
             <div key={item.label} className="flex items-center gap-2">
               <span

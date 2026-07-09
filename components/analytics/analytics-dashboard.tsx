@@ -87,12 +87,12 @@ export function AnalyticsDashboard() {
           <h1 className="font-display text-2xl text-charcoal">Analíticas</h1>
           <p className="mt-1 text-sm text-stone">Estadísticas de tráfico del sitio web</p>
         </div>
-        <div className="flex gap-1 rounded-lg bg-stone-light/20 p-0.5">
+        <div className="flex gap-1 rounded-lg bg-stone-light/20 p-0.5 max-sm:w-full max-sm:justify-center">
           {ranges.map((r) => (
             <button
               key={r.value}
               onClick={() => setRange(r.value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors sm:px-3 ${
                 range === r.value
                   ? 'bg-white text-charcoal shadow-sm'
                   : 'text-stone hover:text-charcoal'

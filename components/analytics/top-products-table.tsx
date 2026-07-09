@@ -12,7 +12,7 @@ interface TopProductsTableProps {
 export function TopProductsTable({ data, loading }: TopProductsTableProps) {
   if (loading) {
     return (
-      <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+      <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
         <Skeleton className="mb-4 h-4 w-36" />
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="mb-2 flex items-center gap-2">
@@ -29,7 +29,7 @@ export function TopProductsTable({ data, loading }: TopProductsTableProps) {
   const maxVisitors = Math.max(...data.map((d) => d.visitors), 1)
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
       <h3 className="mb-4 font-display text-sm font-medium text-charcoal">Productos más vistos</h3>
       <div className="space-y-2">
         {data.map((item) => (

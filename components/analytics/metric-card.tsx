@@ -17,7 +17,7 @@ export function MetricCard({ label, value, subtitle, loading, tooltip }: MetricC
 
   if (loading) {
     return (
-      <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+      <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
         <Skeleton className="mb-2 h-3 w-20" />
         <Skeleton className="mb-1 h-8 w-24" />
         <Skeleton className="h-3 w-16" />
@@ -26,7 +26,7 @@ export function MetricCard({ label, value, subtitle, loading, tooltip }: MetricC
   }
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
       <div className="flex items-center gap-1.5">
         <p className="text-xs font-medium uppercase tracking-wider text-stone">{label}</p>
         {tooltip && (
@@ -43,7 +43,7 @@ export function MetricCard({ label, value, subtitle, loading, tooltip }: MetricC
               <Info className="h-3 w-3" />
             </button>
             {showTooltip && (
-              <div className="absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-lg bg-charcoal px-3 py-2 text-xs leading-relaxed text-white shadow-lg">
+              <div className="absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-lg bg-charcoal px-3 py-2 text-xs leading-relaxed text-white shadow-lg max-sm:left-0 max-sm:w-52 max-sm:-translate-x-[calc(50%-12px)]">
                 {tooltip}
                 <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-charcoal" />
               </div>

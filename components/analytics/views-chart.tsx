@@ -23,7 +23,7 @@ export function ViewsChart({ data, loading, compact }: ViewsChartProps) {
 
   if (loading) {
     return (
-      <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+      <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
         <Skeleton className="mb-4 h-4 w-32" />
         <Skeleton className="h-48 w-full rounded-lg" />
       </div>
@@ -35,7 +35,7 @@ export function ViewsChart({ data, loading, compact }: ViewsChartProps) {
   }
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-stone-light/30 sm:p-5">
       <h3 className="mb-4 font-display text-sm font-medium text-charcoal">
         Visitas y Visitantes
       </h3>
@@ -50,7 +50,7 @@ export function ViewsChart({ data, loading, compact }: ViewsChartProps) {
                 return d.toLocaleDateString('es-UY', { day: 'numeric', month: 'short' })
               }}
               tick={{ fontSize: 11, fill: '#78716c' }}
-              interval={compact ? 'preserveStartEnd' : undefined}
+              interval={safeData.length > 10 ? 'preserveStartEnd' : undefined}
             />
             <YAxis tick={{ fontSize: 11, fill: '#78716c' }} />
             <Tooltip
