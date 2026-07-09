@@ -1,7 +1,7 @@
 'use client';
 
 import { supabase } from '@/lib/supabase';
-import { ExternalLink, LayoutList, LogOut, Package } from 'lucide-react';
+import { BarChart3, ExternalLink, LayoutList, LogOut, Package } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -77,6 +77,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <span className="hidden sm:inline text-xs">Categorías</span>
                 <span className="absolute -bottom-6 left-1/2 z-[100] -translate-x-1/2 whitespace-nowrap rounded-md bg-charcoal px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100 sm:hidden">
                   Categorías
+                </span>
+              </Link>
+
+              <Link
+                href="/admin/analytics"
+                aria-label="Analytics"
+                className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-stone transition-colors hover:bg-stone-light/20 hover:text-terracotta-600 sm:w-auto sm:gap-1.5 sm:px-2.5"
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span className="hidden sm:inline text-xs">Analytics</span>
+                <span className="absolute -bottom-6 left-1/2 z-[100] -translate-x-1/2 whitespace-nowrap rounded-md bg-charcoal px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100 sm:hidden">
+                  Analytics
                 </span>
               </Link>
 

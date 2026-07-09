@@ -1,7 +1,7 @@
 'use client';
 
 import { supabase } from '@/lib/supabase';
-import { ExternalLink, LayoutList, Package, Plus } from 'lucide-react';
+import { BarChart3, ExternalLink, LayoutList, Package, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +26,7 @@ export default function AdminDashboard() {
         <p className="mt-1 text-sm text-stone">Gestiona los productos y categorías de Florale</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/admin/products"
           className="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30 transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-terracotta-300/50"
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
         <Link
           href="/"
           target="_blank"
-          className="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30 transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-terracotta-300/50 sm:col-span-2 lg:col-span-1"
+          className="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30 transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-terracotta-300/50"
         >
           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-stone-100 transition-colors group-hover:bg-stone-200">
             <ExternalLink className="h-5 w-5 text-stone-600" />
@@ -75,6 +75,21 @@ export default function AdminDashboard() {
           <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-stone-600 transition-colors group-hover:text-stone-700">
             <ExternalLink className="h-3 w-3" />
             Abrir tienda
+          </span>
+        </Link>
+
+        <Link
+          href="/admin/analytics"
+          className="group rounded-xl bg-white p-5 shadow-sm ring-1 ring-stone-light/30 transition-all hover:-translate-y-0.5 hover:shadow-md hover:ring-terracotta-300/50"
+        >
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-stone-100 transition-colors group-hover:bg-stone-200">
+            <BarChart3 className="h-5 w-5 text-stone-600" />
+          </div>
+          <h2 className="font-display text-lg text-charcoal">Analíticas</h2>
+          <p className="mt-0.5 text-sm text-stone">Estadísticas de tráfico y visitantes</p>
+          <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-stone-600 transition-colors group-hover:text-stone-700">
+            <BarChart3 className="h-3 w-3" />
+            Ver reportes
           </span>
         </Link>
       </div>
